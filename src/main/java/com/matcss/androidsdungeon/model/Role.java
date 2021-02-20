@@ -1,5 +1,6 @@
 package com.matcss.androidsdungeon.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,7 +11,6 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class Role {
 
@@ -20,7 +20,13 @@ public class Role {
 
     private String role_name;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "customer_id", referencedColumnName = "customerId")
+    @JsonBackReference
     private Customer customer;
+
+    public Role(int role_id, String role_name) {
+        this.role_id = role_id;
+        this.role_name = role_name;
+    }
 }
