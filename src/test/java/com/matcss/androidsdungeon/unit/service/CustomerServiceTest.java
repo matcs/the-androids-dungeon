@@ -1,4 +1,4 @@
-package com.matcss.androidsdungeon.service;
+package com.matcss.androidsdungeon.unit.service;
 
 import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.repository.CustomerRepository;
@@ -14,6 +14,10 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.time.LocalDate;
+
+
+//TODO: delete test
 @Slf4j
 @RunWith(SpringRunner.class)
 public class CustomerServiceTest {
@@ -51,7 +55,7 @@ public class CustomerServiceTest {
         Customer customer = customerService.findCustomerById(1);
         Customer customerModel = new Customer(1,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
 
-        Assertions.assertTrue(customer.equals(customerModel));
+        Assertions.assertEquals(customerModel, customer);
     }
 
     @Test
@@ -66,13 +70,17 @@ public class CustomerServiceTest {
         Customer customerModel = new Customer(2,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
         Customer customerCreated = customerService.createCustomer(customerModel);
 
-        log.error(customerCreated.toString());
-
-        Assertions.assertTrue(customerCreated instanceof Customer);
-
-        Assertions.assertTrue(customerCreated.equals(customerModel));
+        Assertions.assertEquals(customerModel, customerCreated);
     }
 
+    @Test
+    public void updateCustomer(){
+        Customer customerBody = new Customer(1,"madfa","ldsamlçfda","Alamo","Silva","t");
+        Customer customerUpdated = customerService.updateCustomerPersonalData(1,customerBody);
 
+        Assertions.assertEquals(customerBody, customerUpdated);
+
+        Assertions.assertEquals(LocalDate.now().toString(), customerUpdated.getUpdate_at());
+    }
 
 }

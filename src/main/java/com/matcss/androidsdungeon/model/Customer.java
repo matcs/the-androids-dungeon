@@ -53,6 +53,14 @@ public class Customer {
         this.update_at = update_at;
     }
 
+    public Customer(String email, String password, String first_name, String last_name, String update_at) {
+        this.email = email;
+        this.password = password;
+        this.first_name = first_name;
+        this.last_name = last_name;
+        this.update_at = update_at;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
