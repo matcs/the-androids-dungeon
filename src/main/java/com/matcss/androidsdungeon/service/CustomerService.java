@@ -1,4 +1,4 @@
-package com.matcss.androidsdungeon.unit.service;
+package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.repository.CustomerRepository;

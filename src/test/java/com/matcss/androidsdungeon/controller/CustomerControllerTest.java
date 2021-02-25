@@ -2,7 +2,7 @@ package com.matcss.androidsdungeon.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.unit.service.CustomerService;
+import com.matcss.androidsdungeon.service.CustomerService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -44,6 +44,10 @@ public class Customer {
     @JsonManagedReference
     private Role role;
 
+    public Customer(int customerId) {
+        this.customerId = customerId;
+    }
+
     public Customer(int customerId, String email, String password, String first_name, String last_name, String update_at) {
         this.customerId = customerId;
         this.email = email;
@@ -73,4 +77,6 @@ public class Customer {
     public int hashCode() {
         return Objects.hash(customerId, email, password, first_name, last_name);
     }
+
+
 }

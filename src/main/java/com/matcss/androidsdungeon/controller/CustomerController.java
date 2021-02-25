@@ -1,7 +1,7 @@
 package com.matcss.androidsdungeon.controller;
 
 import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.unit.service.CustomerService;
+import com.matcss.androidsdungeon.service.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -42,13 +42,11 @@ public class CustomerController {
         return ResponseEntity.accepted().body(customer);
     }
 
-
     //TODO: fix the delete mapping
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") int customerId){
         customerService.deleteCustomerById(customerId);
         return ResponseEntity.noContent().build();
-
     }
 
 

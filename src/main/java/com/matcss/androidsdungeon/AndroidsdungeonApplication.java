@@ -6,7 +6,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories(basePackages = {"com.matcss.androidsdungeon.repository"})
-@ComponentScan(basePackages = {"com.matcss.androidsdungeon.controller", "com.matcss.androidsdungeon.unit.service"})
+@ComponentScan(basePackages = {"com.matcss.androidsdungeon.controller", "com.matcss.androidsdungeon.service"})
 @SpringBootApplication
 public class AndroidsdungeonApplication {
 
