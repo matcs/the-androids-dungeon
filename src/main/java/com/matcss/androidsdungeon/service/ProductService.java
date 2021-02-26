@@ -1,46 +1,63 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.interfaces.CRUDServices;
-import com.matcss.androidsdungeon.model.Product;
+import com.matcss.androidsdungeon.model.ProductCategory;
+import com.matcss.androidsdungeon.model.Products;
 import com.matcss.androidsdungeon.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Slf4j
 @Service
-public class ProductService implements CRUDServices<Product> {
+public class ProductService implements CRUDServices<Products> {
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
-    public List<Product> findAllAvailableProducts(){
+    public ProductService(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
+    public List<Products> findAllAvailableProducts(){
         return productRepository
                 .findAll()
                 .stream()
-                .filter(i -> i.isAvailability())
+                .filter(Products::isAvailability)
                 .collect(Collectors.toList());
     }
 
+    public List<Products> findAllAvailableProductsByCategory(String categoryName){
+        List<Products> products = productRepository
+                .findAll()
+                .stream()
+                .filter(p -> p.getProductCategories()
+                        .stream().anyMatch(pc -> pc.getCategory().getCategory_name().equals(categoryName)))
+                .collect(Collectors.toList());
+
+        return products;
+    }
+
     @Override
-    public List<Product> findAll() {
+    public List<Products> findAll() {
         return productRepository.findAll();
     }
 
     @Override
-    public Product findById(int id) {
+    public Products findById(int id) {
         return productRepository.findByProductId(id);
     }
 
     @Override
-    public Product create(Product obj) {
+    public Products create(Products obj) {
         return productRepository.save(obj);
     }
 
     @Override
-    public Product update(int id, Product obj) {
-        Product product = findById(id);
+    public Products update(int id, Products obj) {
+        Products product = findById(id);
 
         product.setAvailability(obj.isAvailability());
         product.setName(obj.getName());
@@ -53,7 +70,7 @@ public class ProductService implements CRUDServices<Product> {
 
     @Override
     public void delete(int id) {
-        Product product = findById(id);
+        Products product = findById(id);
         productRepository.delete(product);
     }
 }

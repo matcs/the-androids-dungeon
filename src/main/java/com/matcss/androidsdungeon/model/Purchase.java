@@ -32,5 +32,5 @@ public class Purchase {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    private Product product;
+    private Products product;
 }
