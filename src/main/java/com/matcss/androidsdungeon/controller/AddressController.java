@@ -39,13 +39,11 @@ public class AddressController {
     @PostMapping("/{customerId}")
     public ResponseEntity<Address> createAddress(@PathVariable("customerId") int id, @RequestBody Address addressBody){
         addressBody.setCustomer(new Customer(id));
-
         Address createdAddress = addressService.createAddress(addressBody);
-
         return ResponseEntity.accepted().body(createdAddress);
     }
 
-    @PutMapping("/{addressId}/")
+    @PutMapping("/{addressId}")
     public ResponseEntity<Address> updateCustomer(@PathVariable("addressId") int id, @RequestBody Address addressBody){
         Address address = addressService.updateAddress(id,addressBody);
         return ResponseEntity.accepted().body(address);
