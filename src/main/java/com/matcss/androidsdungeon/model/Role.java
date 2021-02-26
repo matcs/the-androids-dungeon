@@ -16,7 +16,7 @@ public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int role_id;
+    private int roleId;
 
     private String role_name;
 
@@ -25,8 +25,8 @@ public class Role {
     @JsonBackReference
     private Customer customer;
 
-    public Role(int role_id, String role_name) {
-        this.role_id = role_id;
+    public Role(int roleId, String role_name) {
+        this.roleId = roleId;
         this.role_name = role_name;
     }
 }

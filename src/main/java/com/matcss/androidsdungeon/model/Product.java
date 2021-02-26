@@ -17,7 +17,7 @@ public class Product {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int product_id;
+    private int productId;
 
     private boolean availability;
 
@@ -35,6 +35,4 @@ public class Product {
 
     @OneToMany(mappedBy = "product")
     private Set<ProductCategory> productCategories;
-
-
 }

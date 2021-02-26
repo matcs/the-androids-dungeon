@@ -18,7 +18,7 @@ public class CreditCard {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int credit_card_id;
+    private int creditCardId;
 
     private String number;
 
@@ -33,8 +33,8 @@ public class CreditCard {
     @JsonBackReference
     private Customer customer;
 
-    public CreditCard(int credit_card_id, String number, String ccv, String expiration_date) {
-        this.credit_card_id = credit_card_id;
+    public CreditCard(int creditCardId, String number, String ccv, String expiration_date) {
+        this.creditCardId = creditCardId;
         this.number = number;
         this.ccv = ccv;
         this.expiration_date = expiration_date;
@@ -45,11 +45,11 @@ public class CreditCard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CreditCard that = (CreditCard) o;
-        return credit_card_id == that.credit_card_id && validated == that.validated && Objects.equals(number, that.number) && Objects.equals(ccv, that.ccv) && Objects.equals(expiration_date, that.expiration_date);
+        return creditCardId == that.creditCardId && validated == that.validated && Objects.equals(number, that.number) && Objects.equals(ccv, that.ccv) && Objects.equals(expiration_date, that.expiration_date);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(credit_card_id, number, ccv, expiration_date, validated);
+        return Objects.hash(creditCardId, number, ccv, expiration_date, validated);
     }
 }

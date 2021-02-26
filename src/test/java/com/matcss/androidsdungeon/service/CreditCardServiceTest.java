@@ -13,10 +13,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
+import org.springframework.stereotype.Service;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @Slf4j
 @RunWith(SpringRunner.class)
+@Service
 //TODO: payment function
 public class CreditCardServiceTest {
 
@@ -39,7 +41,7 @@ public class CreditCardServiceTest {
         CreditCard creditCardModel = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
 
         Mockito
-                .when(creditCardRepository.findCreditCardByCredit_card_id(creditCardModel.getCredit_card_id()))
+                .when(creditCardRepository.findCreditCardByCreditCardId(creditCardModel.getCreditCardId()))
                 .thenReturn(creditCardModel);
 
         Mockito

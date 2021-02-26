@@ -27,7 +27,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class CreditCardControllerTest {
 
-    private ObjectMapper mapper = new ObjectMapper();
+    private final ObjectMapper mapper = new ObjectMapper();
 
     @Autowired
     private MockMvc mockMvc;
@@ -46,7 +46,7 @@ public class CreditCardControllerTest {
                 .perform(MockMvcRequestBuilders.get("/credit_card/{creditCardId}",1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCredit_card_id()));
+                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCreditCardId()));
     }
 
     @Test
@@ -60,12 +60,12 @@ public class CreditCardControllerTest {
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(creditCard)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCredit_card_id()))
+                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCreditCardId()))
                 .andDo(print());
     }
 
     @Test
-    public void updateAddressData() throws Exception {
+    public void updateCreditCardData() throws Exception {
         CreditCard creditCardData = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
 
         CreditCard creditCardBody = new CreditCard(1,"5334449697390149","123","06/28");

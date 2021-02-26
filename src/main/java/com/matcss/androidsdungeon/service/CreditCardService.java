@@ -4,9 +4,11 @@ import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.CreditCard;
 import com.matcss.androidsdungeon.repository.CreditCardRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class CreditCardService implements CRUDServices<CreditCard> {
 
     @Autowired
@@ -19,7 +21,7 @@ public class CreditCardService implements CRUDServices<CreditCard> {
 
     @Override
     public CreditCard findById(int id) {
-        return creditCardRepository.findCreditCardByCredit_card_id(id);
+        return creditCardRepository.findCreditCardByCreditCardId(id);
     }
 
     @Override
@@ -35,14 +37,13 @@ public class CreditCardService implements CRUDServices<CreditCard> {
         creditCard.setCcv(creditCardBody.getCcv());
         creditCard.setExpiration_date(creditCard.getExpiration_date());
         creditCard.setValidated(false);
-        CreditCard updatedCreditCard = creditCardRepository.save(creditCard);
 
-        return updatedCreditCard;
+        return creditCardRepository.save(creditCard);
     }
 
     @Override
     public void delete(int id) {
-        CreditCard creditCard = creditCardRepository.findCreditCardByCredit_card_id(id);
+        CreditCard creditCard = creditCardRepository.findCreditCardByCreditCardId(id);
         creditCardRepository.delete(creditCard);
     }
 }
