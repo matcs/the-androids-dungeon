@@ -1,11 +1,11 @@
 package com.matcss.androidsdungeon.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -16,41 +16,50 @@ import java.util.Set;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class Categories {
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int category_id;
+    private int categoryId;
 
-    private String category_name;
-
-    public String getCategory_name() {
-        return category_name;
-    }
+    private String categoryName;
 
     @OneToMany(mappedBy = "category")
-    @JsonManagedReference
+    @JsonIgnore
     private Set<ProductCategory> productCategories;
 
     @Override
     public String toString() {
-        return "Categories{" +
-                "category_id=" + category_id +
-                ", category_name='" + category_name + '\'' +
+        return "Category{" +
+                "category_id=" + categoryId +
+                ", category_name='" + categoryName + '\'' +
                 ", productCategories=" + productCategories +
                 '}';
+    }
+
+    public Category(int categoryId) {
+        this.categoryId = categoryId;
+    }
+
+    public Category(String categoryName) {
+        this.categoryName = categoryName;
+    }
+
+    public Category(int categoryId, String categoryName) {
+        this.categoryId = categoryId;
+        this.categoryName = categoryName;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Categories that = (Categories) o;
-        return category_id == that.category_id && Objects.equals(category_name, that.category_name);
+        Category category = (Category) o;
+        return categoryId == category.categoryId && categoryName.equals(category.categoryName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(category_id, category_name);
+        return Objects.hash(categoryId, categoryName);
     }
 }
