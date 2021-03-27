@@ -1,6 +1,6 @@
 package com.matcss.androidsdungeon.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,22 +22,45 @@ public class CreditCard {
 
     private String number;
 
-    private String ccv;
+    private String cvv;
 
-    private String expiration_date;
+    private String expirationDate;
 
     private boolean validated;
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private Customer customer;
 
-    public CreditCard(int creditCardId, String number, String ccv, String expiration_date) {
+    public CreditCard(int creditCardId, String number, String cvv, String expirationDate) {
         this.creditCardId = creditCardId;
         this.number = number;
-        this.ccv = ccv;
-        this.expiration_date = expiration_date;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+    }
+
+    public CreditCard(int creditCardId, String number, String cvv, String expirationDate, boolean validated) {
+        this.creditCardId = creditCardId;
+        this.number = number;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+        this.validated = validated;
+    }
+
+    public CreditCard(String number, String cvv, String expirationDate, boolean validated) {
+        this.number = number;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+        this.validated = validated;
+    }
+
+    public CreditCard(String number, String cvv, String expirationDate, boolean validated, Customer customer) {
+        this.number = number;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+        this.validated = validated;
+        this.customer = customer;
     }
 
     @Override
@@ -45,11 +68,11 @@ public class CreditCard {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         CreditCard that = (CreditCard) o;
-        return creditCardId == that.creditCardId && validated == that.validated && Objects.equals(number, that.number) && Objects.equals(ccv, that.ccv) && Objects.equals(expiration_date, that.expiration_date);
+        return creditCardId == that.creditCardId && Objects.equals(number, that.number) && Objects.equals(cvv, that.cvv) && Objects.equals(expirationDate, that.expirationDate);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(creditCardId, number, ccv, expiration_date, validated);
+        return Objects.hash(creditCardId, number, cvv, expirationDate);
     }
 }

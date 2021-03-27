@@ -23,10 +23,9 @@ public class CreditCardController {
         return creditCard.equals(null) ? ResponseEntity.notFound().build() : ResponseEntity.ok(creditCard);
     }
 
-    @PostMapping("/{customerId}")
-    public ResponseEntity<CreditCard> createCreditCard(@PathVariable("customerId") int id, @RequestBody CreditCard creditCardBody){
-        creditCardBody.setCustomer(new Customer(id));
-        CreditCard creditCard = creditCardService.create(creditCardBody);
+    @PostMapping()
+    public ResponseEntity<CreditCard> createCreditCard(@RequestParam("customerId") int customerId, @RequestBody CreditCard creditCardBody){
+        CreditCard creditCard = creditCardService.create(customerId, creditCardBody);
         return ResponseEntity.accepted().body(creditCard);
     }
 

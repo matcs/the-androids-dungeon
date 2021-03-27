@@ -27,8 +27,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @AutoConfigureMockMvc
 public class CreditCardControllerTest {
 
+    private static final String urlTemplate = "/credit_card";
     private final ObjectMapper mapper = new ObjectMapper();
-
     @Autowired
     private MockMvc mockMvc;
 
@@ -37,30 +37,31 @@ public class CreditCardControllerTest {
 
     @Test
     public void givenCreditCardById_whenGetCreditCard_ReturnId() throws Exception {
-
+        final int customerId = 1;
         CreditCard creditCard = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
 
         when(creditCardService.findById(1)).thenReturn(creditCard);
 
         mockMvc
-                .perform(MockMvcRequestBuilders.get("/credit_card/{creditCardId}",1)
+                .perform(MockMvcRequestBuilders.get(urlTemplate+"/{creditCardId}",customerId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCreditCardId()));
+                .andExpect(jsonPath("$.creditCardId").value(creditCard.getCreditCardId()));
     }
 
     @Test
     public void createCreditCard_thenShowHisJson() throws Exception {
-        CreditCard creditCard = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
+        final int customerId = 1;
+        CreditCard creditCard = new CreditCard(1,"5334449697390149","123","06/28",true);
 
-        when(creditCardService.create(creditCard)).thenReturn(creditCard);
+        when(creditCardService.create(customerId, creditCard)).thenReturn(creditCard);
 
         mockMvc
-                .perform(MockMvcRequestBuilders.post("/credit_card/{creditCardId}",1)
+                .perform(MockMvcRequestBuilders.post(urlTemplate + "?customerId=" + customerId)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(creditCard)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.credit_card_id").value(creditCard.getCreditCardId()))
+                .andExpect(jsonPath("$.creditCardId").value(creditCard.getCreditCardId()))
                 .andDo(print());
     }
 
