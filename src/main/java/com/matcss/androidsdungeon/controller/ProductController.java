@@ -1,11 +1,12 @@
 package com.matcss.androidsdungeon.controller;
 
-import com.matcss.androidsdungeon.model.Products;
+import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -20,32 +21,39 @@ public class ProductController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Products>> getAllAvailableProducts(){
-        List<Products> products = productService.findAllAvailableProducts();
+    public ResponseEntity<List<Product>> getAllProducts(){
+        List<Product> products = productService.findAll();
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/category/{category-name}")
-    public ResponseEntity<List<Products>> getAllAvailableProductsByCategory(@PathVariable("category-name") String categoryName){
-        List<Products> products = productService.findAllAvailableProductsByCategory(categoryName);
+    public ResponseEntity<List<Product>> getAllAvailableProductsByCategory(@PathVariable("category-name") String categoryName){
+        List<Product> products = productService.findAllAvailableProductsByCategory(categoryName);
         return ResponseEntity.ok(products);
     }
 
     @GetMapping("/{productId}")
-    public ResponseEntity<Products> getProductById(@PathVariable("productId") int id){
-        Products product = productService.findById(id);
-        return ResponseEntity.ok(product);
+    public ResponseEntity<Product> getProductById(@PathVariable("productId") int id){
+        Product product = productService.findById(id);
+
+        return product != null ? ResponseEntity.ok(product) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Products> createProduct(@RequestBody Products productBody){
-        Products product = productService.create(productBody);
-        return ResponseEntity.accepted().body(product);
+    public ResponseEntity<Product> createProduct(@RequestBody Product productBody){
+        Product product = productService.create(productBody);
+        return product != null ? ResponseEntity.created(URI.create("product"+product.getProductId())).body(product) : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{productId}")
-    public ResponseEntity<Products> updateProduct(@PathVariable("productId") int id, @RequestBody Products productBody){
-        Products product = productService.update(id, productBody);
+    public ResponseEntity<Product> updateProduct(@PathVariable("productId") int id, @RequestBody Product productBody){
+        Product product = productService.update(id, productBody);
         return ResponseEntity.accepted().body(product);
+    }
+
+    @DeleteMapping("/{productId}")
+    public ResponseEntity<?> deleteProduct(@PathVariable("productId") int id){
+        productService.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
