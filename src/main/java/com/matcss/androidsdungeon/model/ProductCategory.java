@@ -1,6 +1,7 @@
 package com.matcss.androidsdungeon.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,24 +18,29 @@ public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int product_category_id;
+    private int productCategoryId;
 
     @ManyToOne
     @JoinColumn(name = "product_id")
     @JsonBackReference
-    private Products product;
+    private Product product;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
     @JsonBackReference
-    private Categories category;
+    private Category category;
+
+    public ProductCategory(Product product, Category category) {
+        this.product = product;
+        this.category = category;
+    }
 
     @Override
     public String toString() {
         return "ProductCategory{" +
-                "product_category_id=" + product_category_id +
+                "product category id=" + productCategoryId +
                 ", product=" + product.getProductId() +
-                ", category=" + category.getCategory_name() +
+                ", category=" + category.getCategoryId() +
                 '}';
     }
 
