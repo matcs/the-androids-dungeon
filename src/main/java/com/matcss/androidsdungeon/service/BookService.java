@@ -4,21 +4,22 @@ import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.Book;
 import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.repository.BookRepository;
-import lombok.extern.slf4j.Slf4j;
+import com.matcss.androidsdungeon.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-@Slf4j
 public class BookService implements CRUDServices<Book> {
 
     @Autowired
     private BookRepository bookRepository;
 
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
+
+    public BookService() { }
 
     @Override
     public List<Book> findAll() {
@@ -30,11 +31,11 @@ public class BookService implements CRUDServices<Book> {
         return bookRepository.findBookByBookId(id);
     }
 
-    public Book create(Book obj,int id) {
-        Product product = productService.findById(id);
-        if(product == null)
-            return null;
-        obj.setProduct(new Product(product.getProductId()));
+    public Book create(int id, Book obj) {
+        Product product = productRepository.findByProductId(id);
+        if (product == null) return null;
+        obj.setProduct(product);
+
         return bookRepository.save(obj);
     }
 
@@ -47,7 +48,7 @@ public class BookService implements CRUDServices<Book> {
     public Book update(int id, Book obj) {
         Book book = findById(id);
 
-        if(book == null)
+        if (book == null)
             return null;
 
         book.setBookId(id);
@@ -62,7 +63,8 @@ public class BookService implements CRUDServices<Book> {
     @Override
     public Book delete(int id) {
         Book book = findById(id);
-        if (book != null) bookRepository.delete(book);
+        if (book != null)
+            bookRepository.delete(book);
         return book;
     }
 

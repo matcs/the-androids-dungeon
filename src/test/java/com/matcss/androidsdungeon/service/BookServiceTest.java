@@ -3,6 +3,7 @@ package com.matcss.androidsdungeon.service;
 import com.matcss.androidsdungeon.model.Book;
 import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.repository.BookRepository;
+import com.matcss.androidsdungeon.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -25,31 +26,39 @@ public class BookServiceTest {
     @MockBean
     private BookRepository bookRepository;
 
+    @MockBean
+    private ProductRepository productRepository;
+
     @TestConfiguration
-    static class BookServiceTestConfiguration{
+    static class BookServiceTestConfiguration {
         @Bean
         public BookService bookService(){
             return new BookService();
         }
+
     }
 
     @Before
     public void setup(){
-        Book bookModel = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1));
+        Book book = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1));
+        Product product = new Product(1,true,"One Piece","byte".getBytes(),"",5f);
 
         Mockito
-                .when(bookRepository.findBookByBookId(bookModel.getBookId()))
-                .thenReturn(bookModel);
+                .when(bookRepository.findBookByBookId(book.getBookId()))
+                .thenReturn(book);
         Mockito
                 .when(bookRepository.save(Mockito.any(Book.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
+        Mockito
+                .when(productRepository.findByProductId(1))
+                .thenReturn(product);
     }
 
     @Test
     public void saveNewBookInDatabase() {
         Book book = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1));
 
-        Book createdBook = bookService.create(book);
+        Book createdBook = bookService.create(1,book);
 
         Assertions.assertEquals(book, createdBook);
     }
