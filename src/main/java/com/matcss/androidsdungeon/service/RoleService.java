@@ -4,9 +4,11 @@ import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.Role;
 import com.matcss.androidsdungeon.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Service
 public class RoleService implements CRUDServices<Role> {
 
     @Autowired
@@ -30,14 +32,15 @@ public class RoleService implements CRUDServices<Role> {
     @Override
     public Role update(int id, Role obj) {
         Role role = findById(id);
-        role.setRole_name(obj.getRole_name());
+        role.setRoleName(obj.getRoleName());
 
         return roleRepository.save(role);
     }
 
     @Override
-    public void delete(int id) {
+    public Role delete(int id) {
         Role role = findById(id);
-        roleRepository.delete(role);
+        if(role != null)roleRepository.delete(role);
+        return role;
     }
 }
