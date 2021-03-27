@@ -100,7 +100,7 @@ public class CustomerControllerTest  {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(customerBody)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.update_at").value(LocalDate.now().toString()))
+                .andExpect(jsonPath("$.updateAt").value(LocalDate.now().toString()))
                 .andDo(print());
     }
 

@@ -80,7 +80,7 @@ public class CustomerServiceTest {
 
         Assertions.assertEquals(customerBody, customerUpdated);
 
-        Assertions.assertEquals(LocalDate.now().toString(), customerUpdated.getUpdate_at());
+        Assertions.assertEquals(LocalDate.now().toString(), customerUpdated.getUpdateAt());
     }
 
 }

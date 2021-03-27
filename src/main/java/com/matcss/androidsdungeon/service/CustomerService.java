@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -35,11 +36,11 @@ public class CustomerService {
     public Customer updateCustomerPersonalData(int id, Customer customerBody){
         Customer customer = findCustomerById(id);
 
-        customer.setFirst_name(customerBody.getFirst_name());
-        customer.setLast_name(customerBody.getLast_name());
+        customer.setFirstName(customerBody.getFirstName());
+        customer.setLastName(customerBody.getLastName());
         customer.setEmail(customerBody.getEmail());
         customer.setPassword(customerBody.getPassword());
-        customer.setUpdate_at(LocalDate.now().toString());
+        customer.setUpdateAt(LocalDate.now().toString());
 
         final Customer updatedCustomer = customerRepository.save(customer);
 

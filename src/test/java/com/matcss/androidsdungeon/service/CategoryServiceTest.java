@@ -45,7 +45,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void saveNewCategoryIndDatabase(){
+    public void saveNewCategoryInDatabase(){
         Category category = new Category(1,"MANGA");
 
         Category createdCategory = categoryService.create(category);
@@ -61,7 +61,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void findCategoryByIdThenReturnABookClass(){
+    public void findCategoryByIdThenReturnACategoryClass(){
         Category category = categoryService.findById(1);
         Category categoryModel = new Category(1,"MANGA");
 
@@ -69,7 +69,7 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void updateBook(){
+    public void updateCategory(){
         Category categoryBody = new Category("GRAPHIC_NOVEL");
         Category category = categoryService.update(1, categoryBody);
         Category categoryModelCompare = new Category(1,"GRAPHIC_NOVEL");;

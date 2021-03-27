@@ -7,5 +7,5 @@ public interface CRUDServices<T> {
     T findById(int id);
     T create(T obj);
     T update(int id, T obj);
-    void delete(int id);
+    T delete(int id);
 }

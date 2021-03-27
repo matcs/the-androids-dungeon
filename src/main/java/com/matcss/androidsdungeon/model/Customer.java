@@ -1,5 +1,6 @@
 package com.matcss.androidsdungeon.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.*;
 
@@ -22,47 +23,47 @@ public class Customer {
 
     private String password;
 
-    private String first_name;
+    private String firstName;
 
-    private String last_name;
+    private String lastName;
 
-    private String update_at;
+    private String updateAt;
 
-    @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<CreditCard> creditCards;
 
-    @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Address> addresses;
 
-    @OneToMany(mappedBy = "customer")
-    @JsonManagedReference
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
     private Set<Purchase> purchases;
 
     @OneToOne(mappedBy = "customer")
-    @JsonManagedReference
+    @JsonIgnore
     private Role role;
 
     public Customer(int customerId) {
         this.customerId = customerId;
     }
 
-    public Customer(int customerId, String email, String password, String first_name, String last_name, String update_at) {
+    public Customer(int customerId, String email, String password, String firstName, String lastName, String updateAt) {
         this.customerId = customerId;
         this.email = email;
         this.password = password;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.update_at = update_at;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.updateAt = updateAt;
     }
 
-    public Customer(String email, String password, String first_name, String last_name, String update_at) {
+    public Customer(String email, String password, String firstName, String lastName, String updateAt) {
         this.email = email;
         this.password = password;
-        this.first_name = first_name;
-        this.last_name = last_name;
-        this.update_at = update_at;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.updateAt = updateAt;
     }
 
     @Override
@@ -70,12 +71,12 @@ public class Customer {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Customer customer = (Customer) o;
-        return customerId == customer.customerId && email.equals(customer.email) && password.equals(customer.password) && first_name.equals(customer.first_name) && last_name.equals(customer.last_name);
+        return customerId == customer.customerId && email.equals(customer.email) && password.equals(customer.password) && firstName.equals(customer.firstName) && lastName.equals(customer.lastName);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(customerId, email, password, first_name, last_name);
+        return Objects.hash(customerId, email, password, firstName, lastName);
     }
 
 

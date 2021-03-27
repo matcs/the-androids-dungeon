@@ -1,13 +1,13 @@
 server:
   port: 8080
-
+  max-http-header-size: 10000000
 spring:
   application:
     name: AndroidDungeon
   jpa:
-    show-sql: true
+    show-sql: false
     hibernate:
-      ddl-auto: update
+      ddl-auto: create
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL57Dialect
