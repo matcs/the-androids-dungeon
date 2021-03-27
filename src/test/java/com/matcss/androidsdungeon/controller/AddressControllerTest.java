@@ -82,7 +82,7 @@ public class AddressControllerTest {
                 .perform(MockMvcRequestBuilders.post("/address/{customerId}/",1)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(mapper.writeValueAsString(address)))
-                .andExpect(status().isAccepted())
+                .andExpect(status().isCreated())
                 .andExpect(jsonPath("$.addressId").value(address.getAddressId()))
                 .andDo(print());
     }

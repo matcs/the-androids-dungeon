@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -33,14 +34,17 @@ public class AddressController {
 
     @GetMapping("/{addressId}")
     public ResponseEntity<Address> getAddressById(@PathVariable("addressId") int id){
-        return ResponseEntity.ok(addressService.getAddressById(id));
+        Address address = addressService.getAddressById(id);
+
+        return address != null ? ResponseEntity.ok(address) : ResponseEntity.notFound().build();
+
     }
 
     @PostMapping("/{customerId}")
     public ResponseEntity<Address> createAddress(@PathVariable("customerId") int id, @RequestBody Address addressBody){
         addressBody.setCustomer(new Customer(id));
         Address createdAddress = addressService.createAddress(addressBody);
-        return ResponseEntity.accepted().body(createdAddress);
+        return ResponseEntity.created(URI.create("/address/"+createdAddress.getAddressId())).body(createdAddress);
     }
 
     @PutMapping("/{addressId}")

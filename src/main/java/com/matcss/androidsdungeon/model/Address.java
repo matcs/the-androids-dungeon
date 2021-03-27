@@ -1,6 +1,7 @@
 package com.matcss.androidsdungeon.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -34,7 +35,7 @@ public class Address {
 
     @ManyToOne
     @JoinColumn(nullable = false)
-    @JsonBackReference
+    @JsonIgnore
     private Customer customer;
 
     @Override
@@ -62,6 +63,16 @@ public class Address {
 
     public Address(int addressId, String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
         this.addressId = addressId;
+        this.street = street;
+        this.number = number;
+        this.cep = cep;
+        this.neighborhood = neighborhood;
+        this.reference = reference;
+        this.selected_address = selected_address;
+        this.customer = customer;
+    }
+
+    public Address(String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
         this.street = street;
         this.number = number;
         this.cep = cep;
