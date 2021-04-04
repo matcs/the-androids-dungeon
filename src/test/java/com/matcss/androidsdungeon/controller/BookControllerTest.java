@@ -47,7 +47,7 @@ public class BookControllerTest {
         books.add(new Book(2, "Dragon Ball Z", "JP", "545465", "19x2x12", new Product(2)));
         books.add(new Book(3, "Batman Arkham", "EN", "545465", "20x21x12", new Product(3)));
 
-        given(bookService.findAll()).willReturn(books);
+        given(bookService.findAllBooks()).willReturn(books);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -63,7 +63,7 @@ public class BookControllerTest {
         final int productId = 3;
         Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12");
 
-        when(bookService.create(productId, book)).thenReturn(book);
+        when(bookService.saveBook(productId, book)).thenReturn(book);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.post(urlTemplate + "?productId=" + productId)
@@ -80,8 +80,8 @@ public class BookControllerTest {
         Book book = new Book(1, "OnePiece", "JP", "545465", "20x21x12");
         Book bookBody = new Book("One Piece", "PT", "545465", "20x21x12");
 
-        when(bookService.findById(bookId)).thenReturn(book);
-        when(bookService.update(bookId, bookBody)).thenReturn(bookBody);
+        when(bookService.findBookById(bookId)).thenReturn(book);
+        when(bookService.saveBook(bookId, bookBody)).thenReturn(bookBody);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.put(urlTemplate + "/{bookId}", bookId)
@@ -96,8 +96,8 @@ public class BookControllerTest {
         final int bookId = 1;
         Book book = new Book(1, "OnePiece", "JP", "545465", "20x21x12");
 
-        when(bookService.delete(bookId)).thenReturn(book);
-        when(bookService.findById(bookId)).thenReturn(null);
+        when(bookService.deleteBook(bookId)).thenReturn(book);
+        when(bookService.findBookById(bookId)).thenReturn(null);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.delete(urlTemplate + "/{bookId}", bookId)

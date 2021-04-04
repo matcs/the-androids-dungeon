@@ -63,20 +63,6 @@ public class Product {
     }
 
     @Override
-    public String toString() {
-        return "Product{" +
-                "productId=" + productId +
-                ", availability=" + availability +
-                ", name='" + name + '\'' +
-                ", photo=" + Arrays.toString(photo) +
-                ", provider='" + provider + '\'' +
-                ", stars=" + stars +
-                ", purchases=" + purchases +
-                ", productCategories=" + productCategories +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -89,5 +75,19 @@ public class Product {
         int result = Objects.hash(productId, availability, name, provider, stars);
         result = 31 * result + Arrays.hashCode(photo);
         return result;
+    }
+
+    @Override
+    public String toString() {
+        return "Product{" +
+                "productId=" + productId +
+                ", availability=" + availability +
+                ", name='" + name + '\'' +
+                ", photo=" + Arrays.toString(photo) +
+                ", provider='" + provider + '\'' +
+                ", stars=" + stars +
+                ", purchases=" + purchases +
+                ", productCategories=" + productCategories +
+                '}';
     }
 }

@@ -27,9 +27,11 @@ public class ProductDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         productRepository.saveAll(generateProductList());
+        log.info("done!");
     }
 
     private List<Product> generateProductList(){
+        log.info("generating products...");
         return Arrays.asList(
             //3
             new Product(true,"One Piece",null,"Japan",5),

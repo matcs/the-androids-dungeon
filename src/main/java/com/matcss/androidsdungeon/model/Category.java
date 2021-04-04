@@ -1,7 +1,6 @@
 package com.matcss.androidsdungeon.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -28,14 +27,6 @@ public class Category {
     @JsonIgnore
     private Set<ProductCategory> productCategories;
 
-    @Override
-    public String toString() {
-        return "Category{" +
-                "category_id=" + categoryId +
-                ", category_name='" + categoryName + '\'' +
-                ", productCategories=" + productCategories +
-                '}';
-    }
 
     public Category(int categoryId) {
         this.categoryId = categoryId;
@@ -61,5 +52,14 @@ public class Category {
     @Override
     public int hashCode() {
         return Objects.hash(categoryId, categoryName);
+    }
+
+    @Override
+    public String toString() {
+        return "Category{" +
+                "category_id=" + categoryId +
+                ", category_name='" + categoryName + '\'' +
+                ", productCategories=" + productCategories +
+                '}';
     }
 }

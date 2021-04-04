@@ -1,71 +1,17 @@
 package com.matcss.androidsdungeon.service;
 
-import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.Book;
-import com.matcss.androidsdungeon.model.Product;
-import com.matcss.androidsdungeon.repository.BookRepository;
-import com.matcss.androidsdungeon.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Service
-public class BookService implements CRUDServices<Book> {
+public interface BookService {
+    List<Book> findAllBooks();
 
-    @Autowired
-    private BookRepository bookRepository;
+    Book findBookById(int id);
 
-    @Autowired
-    private ProductRepository productRepository;
+    Book saveBook(int productId, Book book);
 
-    public BookService() { }
+    Book updateBook(int id, Book book);
 
-    @Override
-    public List<Book> findAll() {
-        return bookRepository.findAll();
-    }
-
-    @Override
-    public Book findById(int id) {
-        return bookRepository.findBookByBookId(id);
-    }
-
-    public Book create(int id, Book obj) {
-        Product product = productRepository.findByProductId(id);
-        if (product == null) return null;
-        obj.setProduct(product);
-
-        return bookRepository.save(obj);
-    }
-
-    @Override
-    public Book create(Book obj) {
-        return null;
-    }
-
-    @Override
-    public Book update(int id, Book obj) {
-        Book book = findById(id);
-
-        if (book == null)
-            return null;
-
-        book.setBookId(id);
-        book.setDimensions(obj.getDimensions());
-        book.setIsbn10(obj.getIsbn10());
-        book.setLanguage(obj.getLanguage());
-        book.setName(obj.getName());
-
-        return bookRepository.save(book);
-    }
-
-    @Override
-    public Book delete(int id) {
-        Book book = findById(id);
-        if (book != null)
-            bookRepository.delete(book);
-        return book;
-    }
-
+    Book deleteBook(int id);
 }

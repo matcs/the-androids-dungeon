@@ -1,6 +1,5 @@
 package com.matcss.androidsdungeon.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -53,16 +52,6 @@ public class Purchase {
     }
 
     @Override
-    public String toString() {
-        return "Purchase{" +
-                "purchaseId=" + purchaseId +
-                ", quantity=" + quantity +
-                ", amount=" + amount +
-                ", purchase date=" + purchaseDate + '\'' +
-                '}';
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
@@ -73,5 +62,15 @@ public class Purchase {
     @Override
     public int hashCode() {
         return Objects.hash(purchaseId, quantity, amount, purchaseDate);
+    }
+
+    @Override
+    public String toString() {
+        return "Purchase{" +
+                "purchaseId=" + purchaseId +
+                ", quantity=" + quantity +
+                ", amount=" + amount +
+                ", purchase date=" + purchaseDate + '\'' +
+                '}';
     }
 }

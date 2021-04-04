@@ -18,7 +18,6 @@ public class CategoryDataLoader implements ApplicationRunner {
 
     private final CategoryRepository categoryRepository;
 
-
     public CategoryDataLoader(CategoryRepository categoryRepository) {
         this.categoryRepository = categoryRepository;
     }
@@ -26,9 +25,11 @@ public class CategoryDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         categoryRepository.saveAll(generateCategoryList());
+        log.info("done");
     }
 
     private List<Category> generateCategoryList(){
+        log.info("generating categories...");
         return Arrays.asList(
                 //6
                 new Category("MANGA"),

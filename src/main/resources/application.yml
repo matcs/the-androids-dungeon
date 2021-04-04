@@ -22,4 +22,8 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     hikari:
       connection-timeout: 20000
-
+  security:
+    user:
+      name: spring-admin
+      password: sadmin
+      roles: ADMIN

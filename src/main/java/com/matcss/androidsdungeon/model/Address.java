@@ -1,8 +1,6 @@
 package com.matcss.androidsdungeon.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -38,17 +36,14 @@ public class Address {
     @JsonIgnore
     private Customer customer;
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Address address = (Address) o;
-        return addressId == address.addressId && selected_address == address.selected_address && Objects.equals(street, address.street) && Objects.equals(number, address.number) && Objects.equals(cep, address.cep) && Objects.equals(neighborhood, address.neighborhood) && Objects.equals(reference, address.reference);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(addressId, street, number, cep, neighborhood, reference, selected_address);
+    public Address(String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
+        this.street = street;
+        this.number = number;
+        this.cep = cep;
+        this.neighborhood = neighborhood;
+        this.reference = reference;
+        this.selected_address = selected_address;
+        this.customer = customer;
     }
 
     public Address(int addressId, String street, String number, String cep, String neighborhood, String reference, int selected_address) {
@@ -72,14 +67,17 @@ public class Address {
         this.customer = customer;
     }
 
-    public Address(String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
-        this.street = street;
-        this.number = number;
-        this.cep = cep;
-        this.neighborhood = neighborhood;
-        this.reference = reference;
-        this.selected_address = selected_address;
-        this.customer = customer;
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Address address = (Address) o;
+        return addressId == address.addressId && selected_address == address.selected_address && Objects.equals(street, address.street) && Objects.equals(number, address.number) && Objects.equals(cep, address.cep) && Objects.equals(neighborhood, address.neighborhood) && Objects.equals(reference, address.reference);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(addressId, street, number, cep, neighborhood, reference, selected_address);
     }
 
     @Override

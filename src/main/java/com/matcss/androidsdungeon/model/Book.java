@@ -39,13 +39,11 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Book(int bookId, String name, String language, String isbn10, String dimensions, Product product) {
-        this.bookId = bookId;
+    public Book(String name, String language, String isbn10, String dimensions) {
         this.name = name;
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
-        this.product = product;
     }
 
     public Book(int bookId, String name, String language, String isbn10, String dimensions) {
@@ -54,14 +52,15 @@ public class Book {
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
-        this.product = product;
     }
 
-    public Book(String name, String language, String isbn10, String dimensions) {
+    public Book(int bookId, String name, String language, String isbn10, String dimensions, Product product) {
+        this.bookId = bookId;
         this.name = name;
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
+        this.product = product;
     }
 
     @Override

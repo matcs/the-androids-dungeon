@@ -5,7 +5,6 @@ import com.matcss.androidsdungeon.interfaces.Images;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import lombok.ToString;
 
 import javax.persistence.*;
 import java.io.ByteArrayOutputStream;
@@ -19,7 +18,6 @@ import java.util.zip.Inflater;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 public class Page implements Images {
 
@@ -37,6 +35,12 @@ public class Page implements Images {
     @JsonIgnore
     private Book book;
 
+    public Page(int pageId, byte[] pageImage, int pageNumber) {
+        this.pageId = pageId;
+        this.pageImage = pageImage;
+        this.pageNumber = pageNumber;
+    }
+
     public Page(byte[] pageImage, int pageNumber) {
         this.pageImage = pageImage;
         this.pageNumber = pageNumber;
@@ -46,18 +50,6 @@ public class Page implements Images {
         this.pageNumber = pageNumber;
         this.pageImage = pageImage;
         this.book = book;
-    }
-
-    public Page(byte[] pageImage, int pageNumber, Book book) {
-        this.pageImage = pageImage;
-        this.pageNumber = pageNumber;
-        this.book = book;
-    }
-
-    public Page(int pageId, byte[] pageImage, int pageNumber) {
-        this.pageId = pageId;
-        this.pageImage = pageImage;
-        this.pageNumber = pageNumber;
     }
 
     public Page(int pageId, byte[] pageImage, int pageNumber, Book book) {
@@ -78,9 +70,10 @@ public class Page implements Images {
             int count = deflater.deflate(buffer);
             outputStream.write(buffer, 0, count);
         }
-            try {
-                outputStream.close();
-            } catch (IOException e) {
+        try {
+            outputStream.close();
+        } catch (IOException e) {
+            System.out.println(e.getMessage());
         }
 
         return outputStream.toByteArray();
@@ -99,8 +92,9 @@ public class Page implements Images {
             }
             outputStream.close();
         } catch (IOException ioe) {
-
-            } catch (DataFormatException e) {
+            System.out.println(ioe.getMessage());
+        } catch (DataFormatException e) {
+            System.out.println(e.getMessage());
         }
 
         return outputStream.toByteArray();

@@ -1,13 +1,18 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.Customer;
+import com.matcss.androidsdungeon.model.Role;
 import com.matcss.androidsdungeon.repository.CustomerRepository;
+import com.matcss.androidsdungeon.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -15,6 +20,14 @@ public class CustomerService {
 
     @Autowired
     private CustomerRepository customerRepository;
+
+    @Autowired
+    private RoleRepository roleRepository;
+
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     public List<Customer> findAllCustomer(){
         return customerRepository.findAll();
@@ -30,6 +43,13 @@ public class CustomerService {
     }
 
     public Customer createCustomer(Customer customer){
+        Role role = roleRepository.findRoleByRoleName("USER");
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        customer.setPassword(passwordEncoder().encode(customer.getPassword()));
+        customer.setUpdateAt(LocalDate.now().toString());
+        customer.setRoles(roles);
+
         return customerRepository.save(customer);
     }
 

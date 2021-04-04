@@ -40,14 +40,6 @@ public class CreditCard {
         this.expirationDate = expirationDate;
     }
 
-    public CreditCard(int creditCardId, String number, String cvv, String expirationDate, boolean validated) {
-        this.creditCardId = creditCardId;
-        this.number = number;
-        this.cvv = cvv;
-        this.expirationDate = expirationDate;
-        this.validated = validated;
-    }
-
     public CreditCard(String number, String cvv, String expirationDate, boolean validated) {
         this.number = number;
         this.cvv = cvv;
@@ -61,6 +53,14 @@ public class CreditCard {
         this.expirationDate = expirationDate;
         this.validated = validated;
         this.customer = customer;
+    }
+
+    public CreditCard(int creditCardId, String number, String cvv, String expirationDate, boolean validated) {
+        this.creditCardId = creditCardId;
+        this.number = number;
+        this.cvv = cvv;
+        this.expirationDate = expirationDate;
+        this.validated = validated;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.matcss.androidsdungeon.service;
 
+import com.matcss.androidsdungeon.implementation.AddressServiceImpl;
 import com.matcss.androidsdungeon.model.Address;
 import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.repository.AddressRepository;
@@ -20,44 +21,51 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class AddressServiceTest {
 
     @Autowired
-    private AddressService addressService;
+    private AddressServiceImpl addressService;
 
     @MockBean
     private AddressRepository addressRepository;
 
+    @MockBean
+    private CustomerService customerService;
+
     @TestConfiguration
     static class AddressServiceTestConfiguration {
         @Bean
-        public AddressService addressService(){
-            return new AddressService();
+        public AddressServiceImpl addressService(){
+            return new AddressServiceImpl();
         }
 
     }
 
     @Before
     public void setup(){
+        Customer customer = new Customer(1,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
         Address addressModel = new Address(1,"msaidhnaf","456","064444","Santos","None",1);
+
         Mockito
                 .when(addressRepository.findAddressByAddressId(addressModel.getAddressId()))
                 .thenReturn(addressModel);
-
         Mockito
                 .when(addressRepository.save(Mockito.any(Address.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
+        Mockito
+                .when(customerService.findCustomerById(1))
+                .thenReturn(customer);
     }
 
     @Test
     public void saveNewCustomerAddressInDatabase(){
-        Customer customerModel = new Customer(1,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
-        Address addressModel = new Address(1,"msaidhnaf","456","064444","Santos","None",1,customerModel);
-        Address createdAddress = addressService.createAddress(addressModel);
+        Customer customer = new Customer(1,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
+        Address address = new Address(1,"msaidhnaf","456","064444","Santos","None",1,customer);
+        Address createdAddress = addressService.saveAddress(1, address);
 
-        Assertions.assertEquals(addressModel, createdAddress);
+        Assertions.assertEquals(address, createdAddress);
     }
 
     @Test
     public void findAddressById(){
-        Address address = addressService.getAddressById(1);
+        Address address = addressService.findAddressById(1);
         Address addressModel = new Address(1,"msaidhnaf","456","064444","Santos","None",1);
 
         Assertions.assertEquals(addressModel, address);

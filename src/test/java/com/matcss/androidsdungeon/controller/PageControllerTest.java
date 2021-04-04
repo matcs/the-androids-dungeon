@@ -124,7 +124,7 @@ public class PageControllerTest {
     public void updateBookPageData() throws Exception {
         Book book = new Book(1,"One Piece","PT","6984716861","20x21x12");
         Page pageData =  new Page(1,"testestest".getBytes(),1, book);
-        Page pageBody =  new Page("null".getBytes(),1, book);
+        Page pageBody =  new Page(1, "null".getBytes(), book);
 
         when(pageService.findById(1)).thenReturn(pageData);
         when(pageService.update(1,pageBody)).thenReturn(pageBody);

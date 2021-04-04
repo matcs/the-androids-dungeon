@@ -25,9 +25,11 @@ public class PurchaseDataLoader implements ApplicationRunner {
     @Override
     public void run(ApplicationArguments args) throws Exception {
         purchaseRepository.saveAll(generatePurchaseList());
+        log.info("done!");
     }
 
     private List<Purchase> generatePurchaseList(){
+        log.info("generating purchases...");
         return Arrays.asList(
                 new Purchase(5,10.5f,"16/03/2021",new Customer(1),new Product(3))
         );

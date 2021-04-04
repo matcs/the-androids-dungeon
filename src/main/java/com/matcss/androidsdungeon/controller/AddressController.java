@@ -1,40 +1,42 @@
 package com.matcss.androidsdungeon.controller;
 
+import com.matcss.androidsdungeon.implementation.AddressServiceImpl;
 import com.matcss.androidsdungeon.model.Address;
 import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.service.AddressService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
 import java.util.List;
 
 @RestController
-@RequestMapping("/address")
+@RequestMapping("/addresses")
 public class AddressController {
 
-    private final AddressService addressService;
+    private final AddressServiceImpl addressService;
 
     @Autowired
-    public AddressController(AddressService addressService){
+    public AddressController(AddressServiceImpl addressService) {
         this.addressService = addressService;
     }
 
     @GetMapping
     public ResponseEntity<List<Address>> getAllAddresses(){
-        List<Address> addresses = addressService.getAllAddresses();
+        List<Address> addresses = addressService.findAllAddresses();
         return ResponseEntity.ok(addresses);
     }
 
-    @GetMapping("/customer/{customerId}")
+    /*@GetMapping("/customer/{customerId}")
     public List<Address> getAddressesByCustomer(@PathVariable("customerId") int id){
-        return addressService.getAllAddressesByCustomerId(id);
-    }
+        return addressService.findAddressById(id);
+    }*/
 
     @GetMapping("/{addressId}")
     public ResponseEntity<Address> getAddressById(@PathVariable("addressId") int id){
-        Address address = addressService.getAddressById(id);
+        Address address = addressService.findAddressById(id);
 
         return address != null ? ResponseEntity.ok(address) : ResponseEntity.notFound().build();
 
@@ -42,8 +44,7 @@ public class AddressController {
 
     @PostMapping("/{customerId}")
     public ResponseEntity<Address> createAddress(@PathVariable("customerId") int id, @RequestBody Address addressBody){
-        addressBody.setCustomer(new Customer(id));
-        Address createdAddress = addressService.createAddress(addressBody);
+        Address createdAddress = addressService.saveAddress(id, addressBody);
         return ResponseEntity.created(URI.create("/address/"+createdAddress.getAddressId())).body(createdAddress);
     }
 
