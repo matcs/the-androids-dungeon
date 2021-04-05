@@ -14,7 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Service;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 @Slf4j
@@ -31,18 +31,10 @@ public class CreditCardServiceTest {
     @MockBean
     private CustomerRepository customerRepository;
 
-    @TestConfiguration
-    static class CreditCardServiceTestConfiguration {
-        @Bean
-        public CreditCardService creditCardService(){
-            return new CreditCardService();
-        }
-    }
-
     @Before
-    public void setup(){
-        CreditCard creditCardModel = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
-        Customer customer = new Customer(1,"dsfjiosj@gmail.com","54654ds","Mc","Poze","15/02/2021");
+    public void setup() {
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        Customer customer = new Customer(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", "15/02/2021");
         Mockito
                 .when(creditCardRepository.findCreditCardByCreditCardId(creditCardModel.getCreditCardId()))
                 .thenReturn(creditCardModel);
@@ -56,35 +48,43 @@ public class CreditCardServiceTest {
     }
 
     @Test
-    public void creditCardFindByIdServiceFoundCostumerTest(){
-        CreditCard creditCard = creditCardService.findById(1);
-        CreditCard creditCardModel = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
+    public void creditCardFindByIdServiceFoundCostumerTest() {
+        CreditCard creditCard = creditCardService.findCreditCardById(1);
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
 
         Assertions.assertEquals(creditCardModel, creditCard);
     }
 
     @Test
-    public void creditCardFindByIdServiceNotFoundCostumerTest(){
-        CreditCard creditCard = creditCardService.findById(2);
+    public void creditCardFindByIdServiceNotFoundCostumerTest() {
+        CreditCard creditCard = creditCardService.findCreditCardById(2);
 
         Assertions.assertNull(creditCard);
     }
 
     @Test
-    public void createCreditCard(){
+    public void createCreditCard() {
         final int customerId = 1;
-        CreditCard creditCardModel = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
-        CreditCard creditCardCreated = creditCardService.create(customerId,creditCardModel);
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        CreditCard creditCardCreated = creditCardService.saveCreditCard(customerId, creditCardModel);
 
         Assertions.assertEquals(creditCardModel, creditCardCreated);
     }
 
     @Test
-    public void updateCreditCard(){
-        CreditCard creditCardBody = new CreditCard("5334449697390149","123","06/28",true);
-        CreditCard creditCardUpdated = creditCardService.update(1, creditCardBody);
-        CreditCard creditCardModelCompare = new CreditCard(1,"5334449697390149","123","06/28",true);
+    public void updateCreditCard() {
+        CreditCard creditCardBody = new CreditCard("5334449697390149", "123", "06/28", true);
+        CreditCard creditCardUpdated = creditCardService.updateCreditCard(1, creditCardBody);
+        CreditCard creditCardModelCompare = new CreditCard(1, "5334449697390149", "123", "06/28", true);
 
         Assertions.assertEquals(creditCardModelCompare, creditCardUpdated);
+    }
+
+    @TestConfiguration
+    static class CreditCardServiceTestConfiguration {
+        @Bean("creditCardTestBean")
+        public CreditCardService creditCardService() {
+            return new CreditCardService();
+        }
     }
 }

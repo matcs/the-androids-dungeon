@@ -77,7 +77,7 @@ public class CustomerControllerTest  {
         Customer customer = new Customer(1,"odisfj","dfjids","sdlfkjodf","fdiog","sdfj");
 
 
-        when(customerService.createCustomer(customer)).thenReturn(customer);
+        when(customerService.saveCustomer(customer)).thenReturn(customer);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
                 .contentType(MediaType.APPLICATION_JSON)
@@ -94,7 +94,7 @@ public class CustomerControllerTest  {
         Customer customerBody = new Customer("djsfnkjsdn@gmail.com","123456","Alex","Pacino", LocalDate.now().toString());
 
         when(customerService.getCustomerResponseEntity(1)).thenReturn(ResponseEntity.ok(customerData));
-        when(customerService.updateCustomerPersonalData(1, customerBody)).thenReturn(customerBody);
+        when(customerService.updateCustomer(1, customerBody)).thenReturn(customerBody);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/customers/{customerId}",1)
                 .contentType(MediaType.APPLICATION_JSON)

@@ -3,7 +3,6 @@ package com.matcss.androidsdungeon.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matcss.androidsdungeon.model.Book;
 import com.matcss.androidsdungeon.model.Page;
-import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.repository.BookRepository;
 import com.matcss.androidsdungeon.service.PageService;
 import org.junit.Ignore;
@@ -19,10 +18,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import org.springframework.web.context.WebApplicationContext;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +53,7 @@ public class PageControllerTest {
         pages.add(new Page(2,"null".getBytes(),2));
         pages.add(new Page(3,"null".getBytes(),3));
 
-        given(pageService.findAll()).willReturn(pages);
+        given(pageService.findAllPages()).willReturn(pages);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -108,7 +104,7 @@ public class PageControllerTest {
                         "test".getBytes());
 
         when(bookRepository.findBookByBookId(1)).thenReturn(book);
-        when(pageService.create(page)).thenReturn(page);
+        when(pageService.savePage(1,page)).thenReturn(page);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.multipart(urlTemplate)
@@ -126,8 +122,8 @@ public class PageControllerTest {
         Page pageData =  new Page(1,"testestest".getBytes(),1, book);
         Page pageBody =  new Page(1, "null".getBytes(), book);
 
-        when(pageService.findById(1)).thenReturn(pageData);
-        when(pageService.update(1,pageBody)).thenReturn(pageBody);
+        when(pageService.findPageById(1)).thenReturn(pageData);
+        when(pageService.updatePage(1,pageBody)).thenReturn(pageBody);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.multipart(urlTemplate+"/{pageId}",1)

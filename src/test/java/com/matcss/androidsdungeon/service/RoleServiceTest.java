@@ -27,17 +27,9 @@ public class RoleServiceTest {
     @MockBean
     private RoleRepository roleRepository;
 
-    @TestConfiguration
-    static class RoleServiceTestConfiguration {
-        @Bean
-        public RoleService roleService(){
-            return new RoleService();
-        }
-    }
-
     @Before
     public void setup() {
-        Role role = new Role(1,"USER");
+        Role role = new Role(1, "USER");
 
         Mockito
                 .when(roleRepository.findByRoleId(1))
@@ -50,34 +42,42 @@ public class RoleServiceTest {
 
     @Test
     public void findRoleByIdAndCheckIfIsEqualsToRoleModel() {
-        Role role = roleService.findById(1);
-        Role roleModel = new Role(1,"USER");
+        Role role = roleService.findRoleById(1);
+        Role roleModel = new Role(1, "USER");
 
         assertEquals(roleModel, role);
     }
 
     @Test
     public void notFindRoleByIdAndCheckIfIsEqualsToNull() {
-        Role role = roleService.findById(2);
+        Role role = roleService.findRoleById(2);
 
         assertNull(role);
     }
 
     @Test
     public void createNewRoleObject() {
-        Role role = new Role(1,"USER");
+        Role role = new Role(1, "USER");
 
-        Role createdRole = roleService.create(role);
+        Role createdRole = roleService.saveRole(role);
 
         assertEquals(role, createdRole);
     }
 
     @Test
     public void findRoleByIdAndUpdate() {
-        Role role = new Role(1,"USER");
-        Role updatedRole = roleService.update(1,role);
-        Role roleCompareModel = new Role(1,"USER");
+        Role role = new Role(1, "USER");
+        Role updatedRole = roleService.updateRole(1, role);
+        Role roleCompareModel = new Role(1, "USER");
 
         assertEquals(updatedRole, roleCompareModel);
+    }
+
+    @TestConfiguration
+    static class RoleServiceTestConfiguration {
+        @Bean("roleServiceTestBean")
+        public RoleService roleService() {
+            return new RoleService();
+        }
     }
 }

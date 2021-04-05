@@ -1,16 +1,11 @@
 package com.matcss.androidsdungeon.model;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.core.annotation.Order;
 
 import javax.persistence.*;
-import java.util.HashSet;
 import java.util.Objects;
-import java.util.Set;
 
 @Getter
 @Setter
@@ -24,11 +19,6 @@ public class Role {
     private int roleId;
 
     private String roleName;
-
-    @ManyToMany()//(mappedBy = "roles")
-    @JoinColumn(nullable = false)
-    @JsonIgnore
-    private Set<Customer> customers;
 
     public Role(int roleId, String roleName) {
         this.roleId = roleId;

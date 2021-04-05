@@ -48,7 +48,7 @@ public class RoleControllerTest {
         roles.add(new Role(1, "USER"));
         roles.add(new Role(2, "ADMIN"));
 
-        given(roleService.findAll()).willReturn(roles);
+        given(roleService.findAllRoles()).willReturn(roles);
 
         mockMvc
                 .perform(get(urlTemplate)
@@ -64,7 +64,7 @@ public class RoleControllerTest {
         roles.add(new Role(1, "USER"));
         roles.add(new Role(2, "ADMIN"));
 
-        given(roleService.findById(1)).willReturn(roles.get(0));
+        given(roleService.findRoleById(1)).willReturn(roles.get(0));
 
         mockMvc
                 .perform(get(urlTemplate + "/{roleId}", 1)
@@ -77,7 +77,7 @@ public class RoleControllerTest {
     public void createRole_And_ShowHisJson() throws Exception {
         Role role = new Role(1, "USER");
 
-        given(roleService.create(role)).willReturn(role);
+        given(roleService.saveRole(role)).willReturn(role);
 
         mockMvc
                 .perform(post(urlTemplate)
@@ -90,7 +90,7 @@ public class RoleControllerTest {
     @Test
     public void updateRole_And_ReturnRole_With_AcceptedHttpStatus() throws Exception {
         Role role = new Role(1, "USER");
-        when(roleService.update(anyInt(), any(Role.class)))
+        when(roleService.updateRole(anyInt(), any(Role.class)))
                 .thenReturn(role);
 
         mockMvc

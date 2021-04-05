@@ -29,18 +29,10 @@ public class PageServiceTest {
     @MockBean
     private BookRepository bookRepository;
 
-    @TestConfiguration
-    static class PageServiceTestConfiguration{
-        @Bean
-        public PageService pageService(){
-            return new PageService();
-        }
-    }
-
     @Before
-    public void setup(){
-        Page page = new Page(1,"null".getBytes(),1);
-        Book book = new Book(1,"","","","");
+    public void setup() {
+        Page page = new Page(1, "null".getBytes(), 1);
+        Book book = new Book(1, "", "", "", "");
 
         Mockito
                 .when(pageRepository.findPageByPageId(1))
@@ -53,35 +45,43 @@ public class PageServiceTest {
     }
 
     @Test
-    public void saveNewPageInDatabase(){
-        Page page = new Page(1,"null".getBytes(),1);
+    public void saveNewPageInDatabase() {
+        Page page = new Page(1, "null".getBytes(), 1);
 
-        Page createdPage = pageService.create(1,page);
+        Page createdPage = pageService.savePage(1, page);
 
         Assertions.assertEquals(page, createdPage);
     }
 
     @Test
-    public void notFindPageThenReturnNull(){
-        Page page = pageService.findById(2);
+    public void notFindPageThenReturnNull() {
+        Page page = pageService.findPageById(2);
 
         Assertions.assertNull(page);
     }
 
     @Test
-    public void findPageByIdThenReturnAPageClass(){
-        Page page = pageService.findById(1);
-        Page pageModel = new Page(1,"null".getBytes(),1);
+    public void findPageByIdThenReturnAPageClass() {
+        Page page = pageService.findPageById(1);
+        Page pageModel = new Page(1, "null".getBytes(), 1);
 
         Assertions.assertEquals(page, pageModel);
     }
 
     @Test
-    public void updatePage(){
+    public void updatePage() {
         Page pageBody = new Page("null".getBytes(), 1);
-        Page page = pageService.update(1, pageBody);
-        Page pageModelCompare = new Page(1,"null".getBytes(),1);;
+        Page page = pageService.updatePage(1, pageBody);
+        Page pageModelCompare = new Page(1, "null".getBytes(), 1);
 
         Assertions.assertEquals(page, pageModelCompare);
+    }
+
+    @TestConfiguration
+    static class PageServiceTestConfiguration {
+        @Bean("pageServiceTestBean")
+        public PageService pageService() {
+            return new PageService();
+        }
     }
 }

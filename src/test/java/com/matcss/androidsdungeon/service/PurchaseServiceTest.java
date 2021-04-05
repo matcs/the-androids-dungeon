@@ -42,36 +42,36 @@ public class PurchaseServiceTest {
 
     }
 
-    @TestConfiguration
-    static class PurchaseServiceTestConfiguration {
-        @Bean
-        public PurchaseService purchaseService() {
-            return new PurchaseService();
-        }
-    }
-
     @Test
-    public void findPurchaseById(){
-        Purchase purchase = purchaseService.findById(1);
+    public void findPurchaseById() {
+        Purchase purchase = purchaseService.findPurchaseById(1);
         Purchase purchaseModel = new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1));
 
         assertEquals(purchase, purchaseModel);
     }
 
     @Test
-    public void notFindPurchaseById(){
-        Purchase purchase = purchaseService.findById(2);
+    public void notFindPurchaseById() {
+        Purchase purchase = purchaseService.findPurchaseById(2);
 
         assertNull(purchase);
     }
 
     @Test
-    public void createPurchase(){
+    public void createPurchase() {
         Purchase purchaseModel = new Purchase(1, 5, 654.50f, LocalDate.now().toString());
-        Purchase purchase = purchaseService.create(purchaseModel, 1, 1);
+        Purchase purchase = purchaseService.savePurchase(purchaseModel, 1, 1);
 
         assertEquals(purchase, purchaseModel);
 
+    }
+
+    @TestConfiguration
+    static class PurchaseServiceTestConfiguration {
+        @Bean("purchaseServiceTestBean")
+        public PurchaseService purchaseService() {
+            return new PurchaseService();
+        }
     }
 
 }

@@ -20,28 +20,26 @@ public class CategoryController {
 
     @GetMapping
     public ResponseEntity<List<Category>> getAllCategories(){
-        List<Category> categories = categoryService.findAll();
+        List<Category> categories = categoryService.findAllCategories();
         return ResponseEntity.ok(categories);
     }
 
     @GetMapping("/{categoryId}")
     public  ResponseEntity<Category> getCategoryById(@PathVariable("categoryId") int id){
-        Category category = categoryService.findById(id);
+        Category category = categoryService.findCategoryById(id);
         return ResponseEntity.ok(category);
     }
 
     @PostMapping
     public ResponseEntity<Category> createCategory(@RequestBody Category categoryBody){
-        Category category = categoryService.create(categoryBody);
+        Category category = categoryService.saveCategory(categoryBody);
         return ResponseEntity.created(URI.create("/category")).body(category);
     }
 
     @PutMapping("/{categoryId}")
     public ResponseEntity<Category> updateCategory(@PathVariable("categoryId") int id, @RequestBody Category categoryBody){
-        Category updatedCategory = categoryService.update(id, categoryBody);
+        Category updatedCategory = categoryService.updateCategory(id, categoryBody);
         return ResponseEntity.accepted().body(updatedCategory);
     }
-
-
 
 }

@@ -21,7 +21,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.hamcrest.Matchers.hasSize;
-import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -47,7 +46,7 @@ public class PurchaseControllerTest {
         purchases.add(new Purchase(2, 15, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1)));
         purchases.add(new Purchase(3, 25, 654.50f, LocalDate.now().toString(), new Customer(2), new Product(3)));
 
-        given(purchaseService.findAll()).willReturn(purchases);
+        given(purchaseService.findAllPurchases()).willReturn(purchases);
 
         mockMvc
                 .perform(get(urlTemplate)
@@ -61,7 +60,7 @@ public class PurchaseControllerTest {
     public void givenPurchaseById_WhenGetPurchase_ThenReturnHttpStatus200() throws Exception {
         Purchase purchase = new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1));
 
-        given(purchaseService.findById(1)).willReturn(purchase);
+        given(purchaseService.findPurchaseById(1)).willReturn(purchase);
 
         mockMvc
                 .perform(get(urlTemplate + "/{purchaseId}",1)
@@ -74,7 +73,7 @@ public class PurchaseControllerTest {
     public void createPurchase_ThenReturnHttpStatus201() throws Exception {
         Purchase purchase = new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1));
 
-        given(purchaseService.create(purchase,1,1)).willReturn(purchase);
+        given(purchaseService.savePurchase(purchase,1,1)).willReturn(purchase);
 
         mockMvc
                 .perform(post(urlTemplate)

@@ -38,12 +38,12 @@ public class CreditCardControllerTest {
     @Test
     public void givenCreditCardById_whenGetCreditCard_ReturnId() throws Exception {
         final int customerId = 1;
-        CreditCard creditCard = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
+        CreditCard creditCard = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
 
-        when(creditCardService.findById(1)).thenReturn(creditCard);
+        when(creditCardService.findCreditCardById(1)).thenReturn(creditCard);
 
         mockMvc
-                .perform(MockMvcRequestBuilders.get(urlTemplate+"/{creditCardId}",customerId)
+                .perform(MockMvcRequestBuilders.get(urlTemplate + "/{creditCardId}", customerId)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.creditCardId").value(creditCard.getCreditCardId()));
@@ -52,12 +52,13 @@ public class CreditCardControllerTest {
     @Test
     public void createCreditCard_thenShowHisJson() throws Exception {
         final int customerId = 1;
-        CreditCard creditCard = new CreditCard(1,"5334449697390149","123","06/28",true);
+        CreditCard creditCard = new CreditCard(1, "5334449697390149", "123", "06/28", true);
 
-        when(creditCardService.create(customerId, creditCard)).thenReturn(creditCard);
+        when(creditCardService.saveCreditCard(customerId, creditCard)).thenReturn(creditCard);
 
         mockMvc
-                .perform(MockMvcRequestBuilders.post(urlTemplate + "?customerId=" + customerId)
+                .perform(MockMvcRequestBuilders.post(urlTemplate)
+                        .param("customerId", String.valueOf(customerId))
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(creditCard)))
                 .andExpect(status().isAccepted())
@@ -67,15 +68,15 @@ public class CreditCardControllerTest {
 
     @Test
     public void updateCreditCardData() throws Exception {
-        CreditCard creditCardData = new CreditCard(1,"5334449697390149","123","06/28",true, new Customer());
+        CreditCard creditCardData = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
 
-        CreditCard creditCardBody = new CreditCard(1,"5334449697390149","123","06/28");
+        CreditCard creditCardBody = new CreditCard(1, "5334449697390149", "123", "06/28");
 
-        when(creditCardService.findById(1)).thenReturn(creditCardData);
-        when(creditCardService.update(1, creditCardBody)).thenReturn(creditCardBody);
+        when(creditCardService.findCreditCardById(1)).thenReturn(creditCardData);
+        when(creditCardService.updateCreditCard(1, creditCardBody)).thenReturn(creditCardBody);
 
         mockMvc
-                .perform(MockMvcRequestBuilders.put("/credit_card/{creditCardId}",1)
+                .perform(MockMvcRequestBuilders.put("/credit_card/{creditCardId}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(mapper.writeValueAsString(creditCardBody)))
                 .andExpect(status().isAccepted())

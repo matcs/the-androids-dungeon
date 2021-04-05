@@ -24,17 +24,9 @@ public class CategoryServiceTest {
     @MockBean
     private CategoryRepository categoryRepository;
 
-    @TestConfiguration
-    static class CategoryServiceTestConfiguration{
-        @Bean
-        public CategoryService categoryService(){
-            return new CategoryService();
-        }
-    }
-
     @Before
-    public void setup(){
-        Category category = new Category(1,"MANGA");
+    public void setup() {
+        Category category = new Category(1, "MANGA");
 
         Mockito
                 .when(categoryRepository.findByCategoryId(category.getCategoryId()))
@@ -45,36 +37,44 @@ public class CategoryServiceTest {
     }
 
     @Test
-    public void saveNewCategoryInDatabase(){
-        Category category = new Category(1,"MANGA");
+    public void saveNewCategoryInDatabase() {
+        Category category = new Category(1, "MANGA");
 
-        Category createdCategory = categoryService.create(category);
+        Category createdCategory = categoryService.saveCategory(category);
 
         Assertions.assertEquals(category, createdCategory);
     }
 
     @Test
-    public void notFindCategoryThenReturnNull(){
-        Category category = categoryService.findById(2);
+    public void notFindCategoryThenReturnNull() {
+        Category category = categoryService.findCategoryById(2);
 
         Assertions.assertNull(category);
     }
 
     @Test
-    public void findCategoryByIdThenReturnACategoryClass(){
-        Category category = categoryService.findById(1);
-        Category categoryModel = new Category(1,"MANGA");
+    public void findCategoryByIdThenReturnACategoryClass() {
+        Category category = categoryService.findCategoryById(1);
+        Category categoryModel = new Category(1, "MANGA");
 
         Assertions.assertEquals(category, categoryModel);
     }
 
     @Test
-    public void updateCategory(){
+    public void updateCategory() {
         Category categoryBody = new Category("GRAPHIC_NOVEL");
-        Category category = categoryService.update(1, categoryBody);
-        Category categoryModelCompare = new Category(1,"GRAPHIC_NOVEL");;
+        Category category = categoryService.updateCategory(1, categoryBody);
+        Category categoryModelCompare = new Category(1, "GRAPHIC_NOVEL");
 
         Assertions.assertEquals(category, categoryModelCompare);
+    }
+
+    @TestConfiguration
+    static class CategoryServiceTestConfiguration {
+        @Bean("categoryServiceTestBean")
+        public CategoryService categoryService() {
+            return new CategoryService();
+        }
     }
 
 }

@@ -47,7 +47,7 @@ public class ProductControllerTest {
         products.add(new Product(1, true, "Dragon Ball Z", "byte".getBytes(), "", 4.5f));
         products.add(new Product(1, true, "Naruto", "byte".getBytes(), "", 3f));
 
-        given(productService.findAll()).willReturn(products);
+        given(productService.findAllProducts()).willReturn(products);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -61,7 +61,7 @@ public class ProductControllerTest {
     public void createProduct_And_ShowHisJson() throws Exception {
         Product product = new Product(1, true, "Naruto", "byte".getBytes(), "", 3f);
 
-        when(productService.create(product)).thenReturn(product);
+        when(productService.saveProduct(product)).thenReturn(product);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.post(urlTemplate)
@@ -79,8 +79,8 @@ public class ProductControllerTest {
         Product productBody = new Product(true, "One Piece", "byte".getBytes(), "Japan", 5f);
         Product updatedProduct = new Product(1,true, "One Piece", "byte".getBytes(), "Japan", 5f);
 
-        when(productService.findById(productId)).thenReturn(product);
-        when(productService.update(Mockito.anyInt(),
+        when(productService.findProductById(productId)).thenReturn(product);
+        when(productService.updateProduct(Mockito.anyInt(),
                 Mockito.any(Product.class))).thenReturn(updatedProduct);
 
         mockMvc

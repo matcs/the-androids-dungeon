@@ -24,17 +24,9 @@ public class ProductServiceTest {
     @MockBean
     private ProductRepository productRepository;
 
-    @TestConfiguration
-    static class ProductServiceTestConfiguration {
-        @Bean
-        public ProductService productService(){
-            return new ProductService();
-        }
-    }
-
     @Before
-    public void setup(){
-        Product product = new Product(1,true,"One Piece","byte".getBytes(),"",5f);
+    public void setup() {
+        Product product = new Product(1, true, "One Piece", "byte".getBytes(), "", 5f);
 
         Mockito
                 .when(productRepository.findByProductId(1))
@@ -47,35 +39,43 @@ public class ProductServiceTest {
 
     @Test
     public void findProductByIdAndCheckIfIsEqualsToProductModel() {
-        Product product = productService.findById(1);
-        Product productModel = new Product(1,true,"One Piece","byte".getBytes(),"",5f);
+        Product product = productService.findProductById(1);
+        Product productModel = new Product(1, true, "One Piece", "byte".getBytes(), "", 5f);
 
         Assertions.assertEquals(productModel, product);
     }
 
     @Test
     public void notFindProductByIdAndCheckIfIsNull() {
-        Product product = productService.findById(2);
+        Product product = productService.findProductById(2);
 
         Assertions.assertNull(product);
     }
 
     @Test
-    public void saveNewProduct(){
-        Product product = new Product(1,true,"One Piece","byte".getBytes(),"",5f);
+    public void saveNewProduct() {
+        Product product = new Product(1, true, "One Piece", "byte".getBytes(), "", 5f);
 
-        Product createdProduct = productService.create(product);
+        Product createdProduct = productService.saveProduct(product);
 
         Assertions.assertEquals(createdProduct, product);
     }
 
     @Test
-    public void updateProduct(){
-        Product productBody = new Product(true,"Dragon Ball Z","jp-byte".getBytes(),"Japan",4.5f);
-        Product productUpdated = productService.update(1,productBody);
-        Product productCompareModel = new Product(1,true,"Dragon Ball Z","jp-byte".getBytes(),"Japan",4.5f);
+    public void updateProduct() {
+        Product productBody = new Product(true, "Dragon Ball Z", "jp-byte".getBytes(), "Japan", 4.5f);
+        Product productUpdated = productService.updateProduct(1, productBody);
+        Product productCompareModel = new Product(1, true, "Dragon Ball Z", "jp-byte".getBytes(), "Japan", 4.5f);
 
-        Assertions.assertEquals(productUpdated,productCompareModel);
+        Assertions.assertEquals(productUpdated, productCompareModel);
+    }
+
+    @TestConfiguration
+    static class ProductServiceTestConfiguration {
+        @Bean("productServiceTestBean")
+        public ProductService productService() {
+            return new ProductService();
+        }
     }
 
 }

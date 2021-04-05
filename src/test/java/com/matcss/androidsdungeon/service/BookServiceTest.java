@@ -1,10 +1,8 @@
 package com.matcss.androidsdungeon.service;
 
-import com.matcss.androidsdungeon.implementation.BookServiceImpl;
 import com.matcss.androidsdungeon.model.Book;
 import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.repository.BookRepository;
-import com.matcss.androidsdungeon.repository.ProductRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -22,7 +20,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 public class BookServiceTest {
 
     @Autowired
-    private BookServiceImpl bookService;
+    private BookService bookService;
 
     @MockBean
     private BookRepository bookRepository;
@@ -30,19 +28,10 @@ public class BookServiceTest {
     @MockBean
     private ProductService productService;
 
-    @TestConfiguration
-    static class BookServiceTestConfiguration {
-        @Bean
-        public BookServiceImpl bookService(){
-            return new BookServiceImpl();
-        }
-
-    }
-
     @Before
-    public void setup(){
-        Product product = new Product(1,true,"One Piece","byte".getBytes(),"",5f);
-        Book book = new Book(1,"One Piece","PT","545465","20x21x12", product);
+    public void setup() {
+        Product product = new Product(1, true, "One Piece", "byte".getBytes(), "", 5f);
+        Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12", product);
 
         Mockito
                 .when(bookRepository.findBookByBookId(book.getBookId()))
@@ -51,39 +40,48 @@ public class BookServiceTest {
                 .when(bookRepository.save(Mockito.any(Book.class)))
                 .thenAnswer(i -> i.getArguments()[0]);
         Mockito
-                .when(productService.findById(1))
+                .when(productService.findProductById(1))
                 .thenReturn(product);
     }
 
     @Test
     public void saveNewBookInDatabase() {
-        Book book = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1));
+        Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1));
 
-        Book createdBook = bookService.saveBook(1,book);
+        Book createdBook = bookService.saveBook(1, book);
 
         Assertions.assertEquals(book, createdBook);
     }
 
     @Test
-    public void findBookByIdAndReturnABookClass(){
+    public void findBookByIdAndReturnABookClass() {
         Book book = bookService.findBookById(1);
-        Book bookModel = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1,true,"One Piece","byte".getBytes(),"",5f));
+        Book bookModel = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
 
-        Assertions.assertEquals(book,bookModel);
+        Assertions.assertEquals(book, bookModel);
     }
 
     @Test
-    public void notFindBookAndReturnNull(){
+    public void notFindBookAndReturnNull() {
         Book book = bookService.findBookById(2);
 
         Assertions.assertNull(book);
     }
 
     @Test
-    public void findBookByIdAndUpdateBook(){
-        Book bookModel = new Book(1,"One Piece","PT","545465","20x21x12", new Product(1,true,"One Piece","byte".getBytes(),"",5f));
+    public void findBookByIdAndUpdateBook() {
+        Book bookModel = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
         Book book = bookService.updateBook(1, bookModel);
-        Assertions.assertEquals(book,bookModel);
+        Assertions.assertEquals(book, bookModel);
+    }
+
+    @TestConfiguration
+    static class BookServiceTestConfiguration {
+        @Bean("bookServiceTestBean")
+        public BookService bookService() {
+            return new BookService();
+        }
+
     }
 
 

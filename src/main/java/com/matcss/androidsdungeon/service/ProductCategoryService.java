@@ -1,15 +1,15 @@
 package com.matcss.androidsdungeon.service;
 
-import com.matcss.androidsdungeon.interfaces.CRUDServices;
+import com.matcss.androidsdungeon.model.Category;
+import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.model.ProductCategory;
 import com.matcss.androidsdungeon.repository.ProductCategoryRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class ProductCategoryService implements CRUDServices<ProductCategory> {
+public class ProductCategoryService {
 
     private final ProductCategoryRepository productCategoryRepository;
 
@@ -17,28 +17,30 @@ public class ProductCategoryService implements CRUDServices<ProductCategory> {
         this.productCategoryRepository = productCategoryRepository;
     }
 
-    @Override
-    public List<ProductCategory> findAll() {
+    public List<ProductCategory> findAllProductCategories() {
         return productCategoryRepository.findAll();
     }
 
-    @Override
-    public ProductCategory findById(int id) {
+    public ProductCategory findProductCategoryById(int id) {
         return productCategoryRepository.findByProductCategoryId(id);
     }
 
-    @Override
-    public ProductCategory create(ProductCategory obj) {
-        return productCategoryRepository.save(obj);
+    public ProductCategory saveProductCategory(ProductCategory productCategory) {
+        return productCategoryRepository.save(productCategory);
     }
 
-    @Override
-    public ProductCategory update(int id, ProductCategory obj) {
-        return null;
+    public ProductCategory updateProductCategory(int id, ProductCategory productCategoryDto) {
+        ProductCategory productCategory = findProductCategoryById(id);
+        productCategory.setProduct(new Product(productCategoryDto.getProduct().getProductId()));
+        productCategory.setCategory(new Category(productCategory.getProductCategoryId()));
+
+        return productCategoryRepository.save(productCategoryDto);
     }
 
-    @Override
-    public ProductCategory delete(int id) {
-        return null;
+    public ProductCategory deleteProductCategory(int id) {
+        ProductCategory productCategory = findProductCategoryById(id);
+        if (productCategory != null)
+            productCategoryRepository.delete(productCategory);
+        return productCategory;
     }
 }

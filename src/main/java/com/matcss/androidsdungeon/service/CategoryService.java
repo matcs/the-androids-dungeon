@@ -1,41 +1,34 @@
 package com.matcss.androidsdungeon.service;
 
-import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.Category;
 import com.matcss.androidsdungeon.repository.CategoryRepository;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Slf4j
 @Service
-public class CategoryService implements CRUDServices<Category> {
+public class CategoryService {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @Override
-    public List<Category> findAll() {
+    public List<Category> findAllCategories() {
         return categoryRepository.findAll();
     }
 
-    @Override
-    public Category findById(int id) {
+    public Category findCategoryById(int id) {
         return categoryRepository.findByCategoryId(id);
     }
 
-    @Override
-    public Category create(Category obj) {
+    public Category saveCategory(Category obj) {
         return categoryRepository.save(obj);
     }
 
-    @Override
-    public Category update(int id, Category obj) {
-        Category category = findById(id);
+    public Category updateCategory(int id, Category obj) {
+        Category category = findCategoryById(id);
 
-        if(category == null) return null;
+        if (category == null) return null;
 
         category.setCategoryId(id);
         category.setCategoryName(obj.getCategoryName());
@@ -43,10 +36,9 @@ public class CategoryService implements CRUDServices<Category> {
         return categoryRepository.save(category);
     }
 
-    @Override
-    public Category delete(int id) {
-        Category category = findById(id);
-        if(category != null) categoryRepository.delete(category);
+    public Category deleteCategory(int id) {
+        Category category = findCategoryById(id);
+        if (category != null) categoryRepository.delete(category);
         return category;
     }
 }

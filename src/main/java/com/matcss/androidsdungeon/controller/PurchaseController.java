@@ -20,13 +20,13 @@ public class PurchaseController {
 
     @GetMapping
     public ResponseEntity<List<Purchase>> getAllPurchases() {
-        List<Purchase> purchases = purchaseService.findAll();
+        List<Purchase> purchases = purchaseService.findAllPurchases();
         return ResponseEntity.ok(purchases);
     }
 
     @GetMapping("/{purchaseId}")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable("purchaseId") int id) {
-        Purchase purchase = purchaseService.findById(id);
+        Purchase purchase = purchaseService.findPurchaseById(id);
 
         return purchase != null ? ResponseEntity.ok(purchase) : ResponseEntity.notFound().build();
     }
@@ -43,7 +43,7 @@ public class PurchaseController {
                                                       @RequestParam("productId") int productId,
                                                       @RequestParam("customerId") int customerId) {
 
-        Purchase purchaseCreated = purchaseService.create(purchaseBody, customerId, productId);
+        Purchase purchaseCreated = purchaseService.savePurchase(purchaseBody, customerId, productId);
 
         return ResponseEntity.created(URI.create("purchases/" + purchaseCreated.getPurchaseId())).body(purchaseCreated);
     }

@@ -22,12 +22,12 @@ public class ProductCategoryController {
 
     @GetMapping
     public List<ProductCategory> getAllProductCategories(){
-        return productCategoryService.findAll();
+        return productCategoryService.findAllProductCategories();
     }
 
     @GetMapping("/{productCategoryId}")
     public ResponseEntity<ProductCategory> getProductCategory(@PathVariable("productCategoryId") int id){
-        ProductCategory productCategory = productCategoryService.findById(id);
+        ProductCategory productCategory = productCategoryService.findProductCategoryById(id);
         return productCategory != null ? ResponseEntity.ok(productCategory) : ResponseEntity.notFound().build();
     }
 
@@ -40,7 +40,7 @@ public class ProductCategoryController {
         productCategoryBody.setCategory(new Category(categoryId));
         productCategoryBody.setProduct(new Product(productId));
 
-        ProductCategory createdProductCategory = productCategoryService.create(productCategoryBody);
+        ProductCategory createdProductCategory = productCategoryService.saveProductCategory(productCategoryBody);
 
         return ResponseEntity.created(URI.create("/product-category/"+productId+"/"+categoryId)).body(createdProductCategory);
     }

@@ -46,7 +46,7 @@ public class CategoryControllerTest {
         categories.add(new Category(1,"GRAPHIC_NOVEL"));
         categories.add(new Category(1,"COMIC"));
 
-        given(categoryService.findAll()).willReturn(categories);
+        given(categoryService.findAllCategories()).willReturn(categories);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.get(urlTemplate)
@@ -60,7 +60,7 @@ public class CategoryControllerTest {
     public void createCategory_And_ShowHisJson() throws Exception {
         Category category = new Category(1,"MANGA");
 
-        when(categoryService.create(category)).thenReturn(category);
+        when(categoryService.saveCategory(category)).thenReturn(category);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.post(urlTemplate)
@@ -78,8 +78,8 @@ public class CategoryControllerTest {
         Category categoryBody = new Category("MANGA");
         Category updatedCategory = new Category(categoryId,"MANGA");
 
-        when(categoryService.findById(categoryId)).thenReturn(foundCategory);
-        when(categoryService.update(categoryId, categoryBody)).thenReturn(updatedCategory);
+        when(categoryService.findCategoryById(categoryId)).thenReturn(foundCategory);
+        when(categoryService.updateCategory(categoryId, categoryBody)).thenReturn(updatedCategory);
 
         mockMvc
                 .perform(MockMvcRequestBuilders.put(urlTemplate+"/{categoryId}",categoryId)

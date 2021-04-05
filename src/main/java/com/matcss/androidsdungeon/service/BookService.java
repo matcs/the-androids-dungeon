@@ -1,17 +1,57 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.Book;
+import com.matcss.androidsdungeon.model.Product;
+import com.matcss.androidsdungeon.repository.BookRepository;
+import com.matcss.androidsdungeon.service.ProductService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-public interface BookService {
-    List<Book> findAllBooks();
+@Service
+public class BookService {
 
-    Book findBookById(int id);
+    @Autowired
+    private BookRepository bookRepository;
 
-    Book saveBook(int productId, Book book);
+    @Autowired
+    private ProductService productService;
 
-    Book updateBook(int id, Book book);
+    public List<Book> findAllBooks() {
+        return bookRepository.findAll();
+    }
 
-    Book deleteBook(int id);
+    public Book findBookById(int id) {
+        return bookRepository.findBookByBookId(id);
+    }
+
+    public Book saveBook(int productId, Book book) {
+        Product product = productService.findProductById(productId);
+        if (product == null) return null;
+        book.setProduct(product);
+
+        return bookRepository.save(book);
+    }
+
+    public Book updateBook(int id, Book bookBody) {
+        Book book = findBookById(id);
+
+        if (book == null) return null;
+
+        book.setDimensions(bookBody.getDimensions());
+        book.setIsbn10(bookBody.getIsbn10());
+        book.setLanguage(bookBody.getLanguage());
+        book.setName(bookBody.getName());
+
+        return bookRepository.save(book);
+    }
+
+    public Book deleteBook(int id) {
+        Book book = findBookById(id);
+
+        if (book != null) bookRepository.delete(book);
+
+        return book;
+    }
 }

@@ -13,7 +13,6 @@ import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CustomerService {
@@ -29,20 +28,20 @@ public class CustomerService {
         return new BCryptPasswordEncoder();
     }
 
-    public List<Customer> findAllCustomer(){
+    public List<Customer> findAllCustomer() {
         return customerRepository.findAll();
     }
 
-    public ResponseEntity<Customer> getCustomerResponseEntity(int id){
+    public ResponseEntity<Customer> getCustomerResponseEntity(int id) {
         Customer customer = findCustomerById(id);
         return customer == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(customer);
     }
 
-    public Customer findCustomerById(int id){
+    public Customer findCustomerById(int id) {
         return customerRepository.findCustomerByCustomerId(id);
     }
 
-    public Customer createCustomer(Customer customer){
+    public Customer saveCustomer(Customer customer) {
         Role role = roleRepository.findRoleByRoleName("USER");
         Set<Role> roles = new HashSet<>();
         roles.add(role);
@@ -53,7 +52,7 @@ public class CustomerService {
         return customerRepository.save(customer);
     }
 
-    public Customer updateCustomerPersonalData(int id, Customer customerBody){
+    public Customer updateCustomer(int id, Customer customerBody) {
         Customer customer = findCustomerById(id);
 
         customer.setFirstName(customerBody.getFirstName());
@@ -62,19 +61,16 @@ public class CustomerService {
         customer.setPassword(customerBody.getPassword());
         customer.setUpdateAt(LocalDate.now().toString());
 
-        final Customer updatedCustomer = customerRepository.save(customer);
-
-        return updatedCustomer;
+        return customerRepository.save(customer);
     }
 
     //TODO: fix the delete function
-    public Customer deleteCustomerById(int id){
+    public Customer deleteCustomerById(int id) {
         Customer customer = findCustomerById(id);
-        customerRepository.delete(customer);
+        if (customer != null) customerRepository.delete(customer);
 
         return customer;
     }
-
 
 
 }

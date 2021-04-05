@@ -25,7 +25,7 @@ public class CustomerController {
 
     @PostMapping
     public ResponseEntity<Customer> createCustomer(@RequestBody Customer customerBody) {
-        Customer customer = customerService.createCustomer(customerBody);
+        Customer customer = customerService.saveCustomer(customerBody);
         return ResponseEntity.accepted().body(customer);
     }
 
@@ -36,14 +36,14 @@ public class CustomerController {
 
     @PutMapping("/{customerId}")
     public ResponseEntity<Customer> updateCustomer(@PathVariable("customerId") int customerId, @RequestBody Customer customerBody) {
-        Customer customer = customerService.updateCustomerPersonalData(customerId, customerBody);
+        Customer customer = customerService.updateCustomer(customerId, customerBody);
         return ResponseEntity.accepted().body(customer);
     }
 
     //TODO: fix the delete mapping
     @DeleteMapping("/{customerId}")
     public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") int customerId) {
-        customerService.deleteCustomerById(customerId);
+        Customer customer = customerService.deleteCustomerById(customerId);
         return ResponseEntity.noContent().build();
     }
 

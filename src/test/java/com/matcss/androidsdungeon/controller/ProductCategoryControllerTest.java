@@ -47,7 +47,7 @@ public class ProductCategoryControllerTest {
         productCategories.add(new ProductCategory(1,new Product(1),new Category(1)));
         productCategories.add(new ProductCategory(1,new Product(2),new Category(1)));
 
-        given(productCategoryService.findById(1)).willReturn(productCategories.get(0));
+        given(productCategoryService.findProductCategoryById(1)).willReturn(productCategories.get(0));
 
         mockMvc
                 .perform(get(urlTemplate+"/{productCategoryId}",1)
@@ -62,7 +62,7 @@ public class ProductCategoryControllerTest {
         ProductCategory productCategory = new ProductCategory(1,new Product(1),new Category(1));
 
 
-        given(productCategoryService.create(any(ProductCategory.class))).willReturn(productCategory);
+        given(productCategoryService.saveProductCategory(any(ProductCategory.class))).willReturn(productCategory);
 
         mockMvc
                 .perform(post(urlTemplate)

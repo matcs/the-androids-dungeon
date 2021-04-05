@@ -6,9 +6,12 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 @EnableJpaRepositories(basePackages = {"com.matcss.androidsdungeon.repository"})
-@ComponentScan(basePackages = {"com.matcss.androidsdungeon.controller", "com.matcss.androidsdungeon.service", "com.matcss.androidsdungeon.infrastructure.seeder", "com.matcss.androidsdungeon.implementation", "com.matcss.androidsdungeon.security"})
+@ComponentScan(basePackages = {
+                "com.matcss.androidsdungeon.controller",
+                "com.matcss.androidsdungeon.service",
+                "com.matcss.androidsdungeon.infrastructure.seeder",
+                "com.matcss.androidsdungeon.config"})
 @SpringBootApplication
-//TODO: change all objects model parameter to DTO
 public class AndroidsdungeonApplication {
 
     public static void main(String[] args) {

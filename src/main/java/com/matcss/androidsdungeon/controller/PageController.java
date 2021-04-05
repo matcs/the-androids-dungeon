@@ -27,7 +27,7 @@ public class PageController {
 
     @GetMapping
     public ResponseEntity<List<Page>> getAllPages() {
-        return ResponseEntity.ok(pageService.findAll());
+        return ResponseEntity.ok(pageService.findAllPages());
     }
 
 
@@ -40,7 +40,7 @@ public class PageController {
 
     @GetMapping("/{pageId}")
     public ResponseEntity<Page> getPageById(@PathVariable("pageId") int id) {
-        Page page = pageService.findById(id);
+        Page page = pageService.findPageById(id);
 
         if (page == null)
             return ResponseEntity.notFound().build();
@@ -58,7 +58,7 @@ public class PageController {
         byte[] image = new Page().compressBytes(file.getBytes());
         Page page = new Page(pageNumber, image, new Book(bookId));
 
-        Page createdPage = pageService.create(bookId,page);
+        Page createdPage = pageService.savePage(bookId,page);
 
         return createdPage != null ? ResponseEntity.created(URI.create("/pages/" + createdPage.getPageId())).body(createdPage) : ResponseEntity.badRequest().build();
     }
@@ -68,7 +68,7 @@ public class PageController {
                                            @RequestPart("pageNumber") int pageNumber,
                                            @RequestPart("file") MultipartFile file) throws IOException {
         Page pageBody = new Page(file.getBytes(), pageNumber);
-        Page page = pageService.update(id, pageBody);
+        Page page = pageService.updatePage(id, pageBody);
         return page != null ? ResponseEntity.accepted().body(page) : ResponseEntity.badRequest().build();
     }
 

@@ -1,6 +1,5 @@
 package com.matcss.androidsdungeon.service;
 
-import com.matcss.androidsdungeon.interfaces.CRUDServices;
 import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.model.Purchase;
@@ -11,43 +10,29 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class PurchaseService implements CRUDServices<Purchase> {
+public class PurchaseService {
 
     @Autowired
     private PurchaseRepository purchaseRepository;
 
-    @Override
-    public List<Purchase> findAll() {
+    public List<Purchase> findAllPurchases() {
         return purchaseRepository.findAll();
     }
 
-    @Override
-    public Purchase findById(int id) {
+    public Purchase findPurchaseById(int id) {
         return purchaseRepository.findByPurchaseId(id);
     }
 
-    @Override
-    public Purchase create(Purchase obj) {
-        return null;
-    }
-
-    public Purchase create(Purchase obj, int customerId, int productId){
+    public Purchase savePurchase(Purchase obj, int customerId, int productId) {
         obj.setCustomer(new Customer(customerId));
         obj.setProduct(new Product(productId));
 
         return purchaseRepository.save(obj);
     }
 
-
-    @Override
-    public Purchase update(int id, Purchase obj) {
-        return null;
-    }
-
-    @Override
     public Purchase delete(int id) {
-        Purchase purchase = findById(id);
-        if(purchase != null) purchaseRepository.delete(purchase);
+        Purchase purchase = findPurchaseById(id);
+        if (purchase != null) purchaseRepository.delete(purchase);
 
         return purchase;
     }

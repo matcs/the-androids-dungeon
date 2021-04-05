@@ -1,9 +1,7 @@
 package com.matcss.androidsdungeon.controller;
 
-import com.matcss.androidsdungeon.implementation.AddressServiceImpl;
-import com.matcss.androidsdungeon.model.Address;
-import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.service.AddressService;
+import com.matcss.androidsdungeon.model.Address;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -16,14 +14,15 @@ import java.util.List;
 @RequestMapping("/addresses")
 public class AddressController {
 
-    private final AddressServiceImpl addressService;
+    private final AddressService addressService;
 
     @Autowired
-    public AddressController(AddressServiceImpl addressService) {
+    public AddressController(AddressService addressService) {
         this.addressService = addressService;
     }
 
     @GetMapping
+    @PreAuthorize("hasAuthority('ADMIN')")
     public ResponseEntity<List<Address>> getAllAddresses(){
         List<Address> addresses = addressService.findAllAddresses();
         return ResponseEntity.ok(addresses);
