@@ -1,9 +1,9 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.CreditCard;
-import com.matcss.androidsdungeon.model.Customer;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.repository.CreditCardRepository;
-import com.matcss.androidsdungeon.repository.CustomerRepository;
+import com.matcss.androidsdungeon.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.Before;
 import org.junit.Test;
@@ -14,13 +14,18 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 @Slf4j
 @RunWith(SpringRunner.class)
 //TODO: payment function
 public class CreditCardServiceTest {
+
+    private final Date date = new GregorianCalendar(2019, Calendar.FEBRUARY, 1).getTime();
 
     @Autowired
     private CreditCardService creditCardService;
@@ -29,12 +34,12 @@ public class CreditCardServiceTest {
     private CreditCardRepository creditCardRepository;
 
     @MockBean
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Before
     public void setup() {
-        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
-        Customer customer = new Customer(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", "15/02/2021");
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new User());
+        User user = new User(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", date);
         Mockito
                 .when(creditCardRepository.findCreditCardByCreditCardId(creditCardModel.getCreditCardId()))
                 .thenReturn(creditCardModel);
@@ -44,13 +49,13 @@ public class CreditCardServiceTest {
                 .thenAnswer(i -> i.getArguments()[0]);
 
         Mockito
-                .when(customerRepository.findCustomerByCustomerId(1)).thenReturn(customer);
+                .when(userRepository.findUserByUserId(1)).thenReturn(user);
     }
 
     @Test
     public void creditCardFindByIdServiceFoundCostumerTest() {
         CreditCard creditCard = creditCardService.findCreditCardById(1);
-        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new User());
 
         Assertions.assertEquals(creditCardModel, creditCard);
     }
@@ -65,7 +70,7 @@ public class CreditCardServiceTest {
     @Test
     public void createCreditCard() {
         final int customerId = 1;
-        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        CreditCard creditCardModel = new CreditCard(1, "5334449697390149", "123", "06/28", true, new User());
         CreditCard creditCardCreated = creditCardService.saveCreditCard(customerId, creditCardModel);
 
         Assertions.assertEquals(creditCardModel, creditCardCreated);

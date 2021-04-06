@@ -23,7 +23,7 @@ public class ProductService {
     }
 
     public List<Product> findAllAvailableProductsByCategory(String categoryName) {
-        List<Product> products = productRepository
+        return productRepository
                 .findAll()
                 .stream()
                 .filter(Product::isAvailability)
@@ -31,8 +31,6 @@ public class ProductService {
                         .stream()
                         .anyMatch(pc -> pc.getCategory().getCategoryName().equals(categoryName)))
                 .collect(Collectors.toList());
-
-        return products;
     }
 
     public List<Product> findAllProducts() {
@@ -43,18 +41,17 @@ public class ProductService {
         return productRepository.findByProductId(id);
     }
 
-    public Product saveProduct(Product obj) {
-        return productRepository.save(obj);
+    public Product saveProduct(Product product) {
+        return productRepository.save(product);
     }
 
-    public Product updateProduct(int id, Product obj) {
+    public Product updateProduct(int id, Product productDto) {
         Product product = findProductById(id);
 
-        product.setAvailability(obj.isAvailability());
-        product.setName(obj.getName());
-        product.setPhoto(obj.getPhoto());
-        product.setProvider(obj.getProvider());
-        product.setStars(obj.getStars());
+        product.setAvailability(productDto.isAvailability());
+        product.setName(productDto.getName());
+        product.setPhoto(productDto.getPhoto());
+        product.setStars(productDto.getStars());
 
         return productRepository.save(product);
     }

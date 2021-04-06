@@ -19,14 +19,15 @@ public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "category_id")
     private int categoryId;
 
+    @Column(name = "category_name", unique = true, length = 30)
     private String categoryName;
 
     @OneToMany(mappedBy = "category")
     @JsonIgnore
     private Set<ProductCategory> productCategories;
-
 
     public Category(int categoryId) {
         this.categoryId = categoryId;

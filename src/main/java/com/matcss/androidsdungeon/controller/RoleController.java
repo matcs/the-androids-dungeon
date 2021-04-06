@@ -4,6 +4,7 @@ import com.matcss.androidsdungeon.model.Role;
 import com.matcss.androidsdungeon.service.RoleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -21,28 +22,43 @@ public class RoleController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Role>> getAllRoles(){
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public ResponseEntity<List<Role>> getAllRoles() {
         List<Role> roles = roleService.findAllRoles();
+
         return roles.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(roles);
     }
 
     @GetMapping("/{roleId}")
-    public ResponseEntity<Role> getRoleById(@PathVariable("roleId") int id){
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
+    public ResponseEntity<Role> getRoleById(@PathVariable("roleId") int id) {
         Role role = roleService.findRoleById(id);
+
         return role != null ? ResponseEntity.ok(role) : ResponseEntity.notFound().build();
     }
 
     @PostMapping
-    public ResponseEntity<Role> createRole(@RequestBody Role roleBody){
+    @PreAuthorize("hasAuthority('ADMIN') and hasAuthority('MANAGER')")
+    public ResponseEntity<Role> createRole(@RequestBody Role roleBody) {
         Role role = roleService.saveRole(roleBody);
-        return role != null ? ResponseEntity.created(URI.create("role/"+role.getRoleId())).body(role) : ResponseEntity.badRequest().build();
+
+        return role != null ? ResponseEntity.created(URI.create("role/" + role.getRoleId())).body(role) : ResponseEntity.badRequest().build();
     }
 
     @PutMapping("/{roleId}")
-    public ResponseEntity<Role> updateRole(@PathVariable("roleId") int id, @RequestBody Role roleBody){
+    @PreAuthorize("hasAuthority('ADMIN') and hasAuthority('MANAGER')")
+    public ResponseEntity<Role> updateRole(@PathVariable("roleId") int id, @RequestBody Role roleBody) {
         Role role = roleService.updateRole(id, roleBody);
+
         return role != null ? ResponseEntity.accepted().body(role) : ResponseEntity.badRequest().build();
     }
 
+    @DeleteMapping("/{roleId}")
+    @PreAuthorize("hasAuthority('ADMIN') and hasAuthority('MANAGER')")
+    public ResponseEntity<Role> deleteRole(@PathVariable("roleId") int id) {
+        Role role = roleService.deleteRole(id);
+
+        return role != null ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
+    }
 
 }

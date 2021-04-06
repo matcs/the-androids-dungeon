@@ -42,7 +42,6 @@ public class BookService {
         book.setDimensions(bookBody.getDimensions());
         book.setIsbn10(bookBody.getIsbn10());
         book.setLanguage(bookBody.getLanguage());
-        book.setName(bookBody.getName());
 
         return bookRepository.save(book);
     }

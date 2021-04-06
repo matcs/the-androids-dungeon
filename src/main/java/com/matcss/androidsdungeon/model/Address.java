@@ -11,60 +11,60 @@ import java.util.Objects;
 @Getter
 @Setter
 @NoArgsConstructor
-//@AllArgsConstructor
 @Entity
 public class Address {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "address_id")
     private int addressId;
 
+    @Column(name = "city", length = 120)
+    private String city;
+
+    @Column(name = "street", length = 120)
     private String street;
 
+    @Column(name = "number", length = 15)
     private String number;
 
-    private String cep;
+    @Column(name = "zipcode", length = 20)
+    private String zipcode;
 
-    private String neighborhood;
-
-    private String reference;
-
-    private int selected_address;
+    @Column(name = "refence_point", length = 120)
+    private String referencePoint;
 
     @ManyToOne
     @JoinColumn(nullable = false)
     @JsonIgnore
-    private Customer customer;
+    private User user;
 
-    public Address(String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
+    public Address(String city, String street, String number, String zipcode, String referencePoint, User user) {
+        this.city = city;
         this.street = street;
         this.number = number;
-        this.cep = cep;
-        this.neighborhood = neighborhood;
-        this.reference = reference;
-        this.selected_address = selected_address;
-        this.customer = customer;
+        this.zipcode = zipcode;
+        this.referencePoint = referencePoint;
+        this.user = user;
     }
 
-    public Address(int addressId, String street, String number, String cep, String neighborhood, String reference, int selected_address) {
+    public Address(int addressId, String city, String street, String number, String zipcode, String referencePoint) {
         this.addressId = addressId;
+        this.city = city;
         this.street = street;
         this.number = number;
-        this.cep = cep;
-        this.neighborhood = neighborhood;
-        this.reference = reference;
-        this.selected_address = selected_address;
+        this.zipcode = zipcode;
+        this.referencePoint = referencePoint;
     }
 
-    public Address(int addressId, String street, String number, String cep, String neighborhood, String reference, int selected_address, Customer customer) {
+    public Address(int addressId, String city, String street, String number, String zipcode, String referencePoint, User user) {
         this.addressId = addressId;
+        this.city = city;
         this.street = street;
         this.number = number;
-        this.cep = cep;
-        this.neighborhood = neighborhood;
-        this.reference = reference;
-        this.selected_address = selected_address;
-        this.customer = customer;
+        this.zipcode = zipcode;
+        this.referencePoint = referencePoint;
+        this.user = user;
     }
 
     @Override
@@ -72,12 +72,12 @@ public class Address {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Address address = (Address) o;
-        return addressId == address.addressId && selected_address == address.selected_address && Objects.equals(street, address.street) && Objects.equals(number, address.number) && Objects.equals(cep, address.cep) && Objects.equals(neighborhood, address.neighborhood) && Objects.equals(reference, address.reference);
+        return street.equals(address.street) && number.equals(address.number) && zipcode.equals(address.zipcode);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(addressId, street, number, cep, neighborhood, reference, selected_address);
+        return Objects.hash(street, number, zipcode);
     }
 
     @Override
@@ -86,11 +86,8 @@ public class Address {
                 "addressId=" + addressId +
                 ", street='" + street + '\'' +
                 ", number='" + number + '\'' +
-                ", cep='" + cep + '\'' +
-                ", neighborhood='" + neighborhood + '\'' +
-                ", reference='" + reference + '\'' +
-                ", selected_address=" + selected_address +
-                ", customer_id=" + customer +
+                ", zipcode='" + zipcode + '\'' +
+                ", referencePoint='" + referencePoint + '\'' +
                 '}';
     }
 }

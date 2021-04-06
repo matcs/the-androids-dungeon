@@ -1,6 +1,6 @@
 package com.matcss.androidsdungeon.config;
 
-import com.matcss.androidsdungeon.service.CustomerDetailsService;
+import com.matcss.androidsdungeon.service.UserDetailsServiceImpl;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.SignatureException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,6 +8,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
+import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -18,13 +19,14 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @Service
+@Component
 public class JwtFilter extends OncePerRequestFilter {
 
     public static final String TOKEN_PREFIX = "Bearer ";
     public static final String HEADER_STRING = "Authorization";
 
     @Autowired
-    private CustomerDetailsService userDetailsService;
+    private UserDetailsServiceImpl userDetailsService;
 
     @Autowired
     private JwtUtil jwtUtil;

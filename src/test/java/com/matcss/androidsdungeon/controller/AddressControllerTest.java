@@ -1,26 +1,27 @@
 package com.matcss.androidsdungeon.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.matcss.androidsdungeon.config.SpringSecurityWebAuxTestConfig;
 import com.matcss.androidsdungeon.model.Address;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.service.AddressService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
@@ -32,20 +33,19 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {AddressController.class, AddressService.class})
+@ContextConfiguration(classes = {AddressController.class, AddressService.class, SpringSecurityWebAuxTestConfig.class})
 @WebMvcTest(AddressController.class)
 @AutoConfigureMockMvc
 public class AddressControllerTest {
 
     private static final String urlTemplate = "/addresses";
     private final ObjectMapper mapper = new ObjectMapper();
-
+    private final Date date = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
     @MockBean
     private AddressService addressService;
-
     @Autowired
     private WebApplicationContext context;
-
+    @Autowired
     private MockMvc mockMvc;
 
     @Before
@@ -55,20 +55,18 @@ public class AddressControllerTest {
                 .alwaysDo(print())
                 .apply(springSecurity())
                 .build();
-
-        MockitoAnnotations.initMocks(this);
     }
 
 
     @Test
-    @WithMockUser(username = "spring-user", password = "suser")
+    @WithUserDetails("user-s")
     public void givenAddresses_whenGetAddresses_thenReturnHttpStatus() throws Exception {
+        User user = new User(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", date);
 
         List<Address> addresses = new ArrayList<>();
-
-        addresses.add(new Address(1, "Drummond Street", "951", "12771", "Santos", "None", 1));
-        addresses.add(new Address(2, "Ryder Avenue", "4695", "98109", "None", "Wall Mart", 1));
-        addresses.add(new Address(3, "Austin Secret Lane", "1778", "85001", "None", "None", 1));
+        addresses.add(new Address(1, "Los Santos", "Drummond Street", "951", "12771", "None", user));
+        addresses.add(new Address(2, "Los Santos", "Ryder Avenue", "4695", "98109", "Wall Mart", user));
+        addresses.add(new Address(3, "Los Santos", "Austin Secret Lane", "1778", "85001", "None", user));
 
         given(addressService.findAllAddresses()).willReturn(addresses);
 
@@ -81,10 +79,11 @@ public class AddressControllerTest {
     }
 
     @Test
-    @WithMockUser(username = "null", password = "null")
+    @WithUserDetails("user-s")
     public void givenAddressById_whenGetAddress_ReturnId() throws Exception {
+        User user = new User(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", date);
 
-        Address address = new Address(1, "Drummond Street", "951", "12771", "Santos", "None", 1);
+        Address address = new Address(1, "Los Santos", "Drummond Street", "951", "12771", "None", user);
 
         when(addressService.findAddressById(1)).thenReturn(address);
 
@@ -96,8 +95,11 @@ public class AddressControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "null", password = "null")
     public void createAddress_thenShowHisJson() throws Exception {
-        Address address = new Address(1, "Drummond Street", "951", "12771", "Santos", "None", 1);
+        User user = new User(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", date);
+
+        Address address = new Address(1, "Los Santos", "Drummond Street", "951", "12771", "None", user);
 
         when(addressService.saveAddress(1, address)).thenReturn(address);
 
@@ -111,10 +113,13 @@ public class AddressControllerTest {
     }
 
     @Test
+    @WithMockUser(username = "null", password = "null")
     public void updateAddressData() throws Exception {
-        Address addressData = new Address(1, "Drummond Street", "951", "12771", "Santos", "None", 1);
+        User user = new User(1, "dsfjiosj@gmail.com", "54654ds", "Mc", "Poze", date);
 
-        Address addressBody = new Address(1, "Drummond Street", "951", "12771", "Santos", "None", 1);
+        Address addressData = new Address(1, "Los Sapos", "Drummond Street", "951", "12771", "None", user);
+
+        Address addressBody = new Address(1, "Los Santos", "Drummond Street", "951", "12771", "None");
 
         when(addressService.findAddressById(1)).thenReturn(addressData);
         when(addressService.updateAddress(1, addressBody)).thenReturn(addressBody);

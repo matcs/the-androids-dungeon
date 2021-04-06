@@ -17,6 +17,7 @@ public class ProductCategory {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_category_id")
     private int productCategoryId;
 
     @ManyToOne

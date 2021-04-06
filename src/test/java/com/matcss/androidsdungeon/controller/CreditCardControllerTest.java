@@ -2,7 +2,7 @@ package com.matcss.androidsdungeon.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.matcss.androidsdungeon.model.CreditCard;
-import com.matcss.androidsdungeon.model.Customer;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.service.CreditCardService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -38,7 +38,7 @@ public class CreditCardControllerTest {
     @Test
     public void givenCreditCardById_whenGetCreditCard_ReturnId() throws Exception {
         final int customerId = 1;
-        CreditCard creditCard = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        CreditCard creditCard = new CreditCard(1, "5334449697390149", "123", "06/28", true, new User());
 
         when(creditCardService.findCreditCardById(1)).thenReturn(creditCard);
 
@@ -68,7 +68,7 @@ public class CreditCardControllerTest {
 
     @Test
     public void updateCreditCardData() throws Exception {
-        CreditCard creditCardData = new CreditCard(1, "5334449697390149", "123", "06/28", true, new Customer());
+        CreditCard creditCardData = new CreditCard(1, "5334449697390149", "123", "06/28", true, new User());
 
         CreditCard creditCardBody = new CreditCard(1, "5334449697390149", "123", "06/28");
 

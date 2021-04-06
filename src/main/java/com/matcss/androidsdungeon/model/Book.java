@@ -1,7 +1,10 @@
 package com.matcss.androidsdungeon.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,20 +13,21 @@ import java.util.Set;
 @Getter
 @Setter
 @NoArgsConstructor
-@ToString
 @Entity
 public class Book {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "book_id")
     private int bookId;
 
-    private String name;
-
+    @Column(name = "language", length = 6)
     private String language;
 
+    @Column(name = "isbn10", unique = true, length = 40)
     private String isbn10;
 
+    @Column(name = "dimensions", unique = true, length = 12)
     private String dimensions;
 
     @ManyToOne
@@ -39,24 +43,21 @@ public class Book {
         this.bookId = bookId;
     }
 
-    public Book(String name, String language, String isbn10, String dimensions) {
-        this.name = name;
+    public Book(String language, String isbn10, String dimensions) {
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
     }
 
-    public Book(int bookId, String name, String language, String isbn10, String dimensions) {
+    public Book(int bookId, String language, String isbn10, String dimensions) {
         this.bookId = bookId;
-        this.name = name;
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
     }
 
-    public Book(int bookId, String name, String language, String isbn10, String dimensions, Product product) {
+    public Book(int bookId, String language, String isbn10, String dimensions, Product product) {
         this.bookId = bookId;
-        this.name = name;
         this.language = language;
         this.isbn10 = isbn10;
         this.dimensions = dimensions;
@@ -68,11 +69,22 @@ public class Book {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Book book = (Book) o;
-        return bookId == book.bookId && Objects.equals(name, book.name) && Objects.equals(language, book.language) && Objects.equals(isbn10, book.isbn10) && Objects.equals(dimensions, book.dimensions) && Objects.equals(product, book.product);
+        return Objects.equals(language, book.language) && Objects.equals(isbn10, book.isbn10);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(bookId, name, language, isbn10, dimensions, product);
+        return Objects.hash(language, isbn10);
+    }
+
+    @Override
+    public String toString() {
+        return "Book{" +
+                "bookId=" + bookId +
+                ", name=" + product.getName() +
+                ", language='" + language + '\'' +
+                ", isbn10='" + isbn10 + '\'' +
+                ", dimensions='" + dimensions + '\'' +
+                '}';
     }
 }

@@ -1,8 +1,9 @@
 package com.matcss.androidsdungeon.controller;
 
-import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.service.CustomerService;
+import com.matcss.androidsdungeon.model.User;
+import com.matcss.androidsdungeon.service.UserService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -11,39 +12,43 @@ import java.util.List;
 @RequestMapping("/customers")
 public class CustomerController {
 
-    private final CustomerService customerService;
+    private final UserService userService;
 
-    public CustomerController(CustomerService customerService) {
-        this.customerService = customerService;
+    public CustomerController(UserService userService) {
+        this.userService = userService;
     }
 
     @GetMapping
-    public ResponseEntity<List<Customer>> getAllCustomers() {
-        List<Customer> customerList = customerService.findAllCustomer();
-        return ResponseEntity.ok(customerList);
+    @PreAuthorize("hasAuthority('MANAGER')")
+    public ResponseEntity<List<User>> getAllCustomers() {
+        List<User> userList = userService.findAllCustomer();
+        return ResponseEntity.ok(userList);
     }
 
     @PostMapping
-    public ResponseEntity<Customer> createCustomer(@RequestBody Customer customerBody) {
-        Customer customer = customerService.saveCustomer(customerBody);
-        return ResponseEntity.accepted().body(customer);
+    public ResponseEntity<User> createCustomer(@RequestBody User userBody) {
+        User user = userService.saveCustomer(userBody);
+        return ResponseEntity.accepted().body(user);
     }
 
     @GetMapping("/{customerId}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable("customerId") int customerId) {
-        return customerService.getCustomerResponseEntity(customerId);
+    @PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<User> getCustomerById(@PathVariable("customerId") int customerId) {
+        return userService.getCustomerResponseEntity(customerId);
     }
 
     @PutMapping("/{customerId}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable("customerId") int customerId, @RequestBody Customer customerBody) {
-        Customer customer = customerService.updateCustomer(customerId, customerBody);
-        return ResponseEntity.accepted().body(customer);
+    @PreAuthorize("hasAuthority('USER')")
+    public ResponseEntity<User> updateCustomer(@PathVariable("customerId") int customerId, @RequestBody User userBody) {
+        User user = userService.updateCustomer(customerId, userBody);
+        return ResponseEntity.accepted().body(user);
     }
 
     //TODO: fix the delete mapping
     @DeleteMapping("/{customerId}")
-    public ResponseEntity<Customer> deleteCustomer(@PathVariable("customerId") int customerId) {
-        Customer customer = customerService.deleteCustomerById(customerId);
+    @PreAuthorize("hasAuthority('ADMIN') or hasAnyAuthority('ROLE')")
+    public ResponseEntity<User> deleteCustomer(@PathVariable("customerId") int customerId) {
+        User user = userService.deleteCustomerById(customerId);
         return ResponseEntity.noContent().build();
     }
 

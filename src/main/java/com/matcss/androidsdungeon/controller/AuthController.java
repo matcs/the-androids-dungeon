@@ -1,9 +1,9 @@
 package com.matcss.androidsdungeon.controller;
 
 import com.matcss.androidsdungeon.model.AuthenticationResponse;
-import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.repository.CustomerRepository;
-import com.matcss.androidsdungeon.service.CustomerDetailsService;
+import com.matcss.androidsdungeon.model.User;
+import com.matcss.androidsdungeon.repository.UserRepository;
+import com.matcss.androidsdungeon.service.UserDetailsServiceImpl;
 import com.matcss.androidsdungeon.config.JwtUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,6 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -31,15 +30,15 @@ public class AuthController {
     private JwtUtil jwtUtil;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    private CustomerDetailsService customerDetailsService;
+    private UserDetailsServiceImpl userDetailsServiceImpl;
 
 
     @PostMapping
-    public ResponseEntity<?> createAuthToken(@RequestBody Customer customer) throws Exception {
-        final UserDetails userDetails = customerDetailsService.loadUserByUsername(customer.getUsername());
+    public ResponseEntity<?> createAuthToken(@RequestBody User customer) throws Exception {
+        final UserDetails userDetails = userDetailsServiceImpl.loadUserByUsername(customer.getUsername());
 
         if (userDetails == null)
             throw new Exception();
@@ -49,7 +48,7 @@ public class AuthController {
 
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final User user = new User(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
+        final org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(userDetails.getUsername(), userDetails.getPassword(), userDetails.getAuthorities());
 
         final String token = jwtUtil.generateToken(user);
 
@@ -57,7 +56,7 @@ public class AuthController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> registerNewUser(@RequestBody Customer customer) {
+    public ResponseEntity<?> registerNewUserRoleUser(@RequestBody User customer) {
 
         if (emailExist(customer.getEmail()))
             throw new IllegalArgumentException("There is an account with that email address: " + customer.getEmail());
@@ -70,7 +69,7 @@ public class AuthController {
         );
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        final User user = new User(customer.getUsername(), customer.getPassword(), customer.getAuthorities());
+        final org.springframework.security.core.userdetails.User user = new org.springframework.security.core.userdetails.User(customer.getUsername(), customer.getPassword(), customer.getAuthorities());
 
         final String token = jwtUtil.generateToken(user);
 
@@ -78,6 +77,6 @@ public class AuthController {
     }
 
     private boolean emailExist(String email) {
-        return customerRepository.findCustomerByEmail(email) != null;
+        return userRepository.findUserByEmail(email) != null;
     }
 }

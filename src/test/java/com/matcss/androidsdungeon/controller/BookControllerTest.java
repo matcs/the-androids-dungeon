@@ -43,9 +43,9 @@ public class BookControllerTest {
     @Test
     public void givenAllBooks_WhenGetBooks_ThenReturnHttpStatus200() throws Exception {
         List<Book> books = new ArrayList<>();
-        books.add(new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1)));
-        books.add(new Book(2, "Dragon Ball Z", "JP", "545465", "19x2x12", new Product(2)));
-        books.add(new Book(3, "Batman Arkham", "EN", "545465", "20x21x12", new Product(3)));
+        books.add(new Book(1, "PT", "545465", "20x21x12", new Product(1)));
+        books.add(new Book(2, "JP", "545465", "19x2x12", new Product(2)));
+        books.add(new Book(3, "EN", "545465", "20x21x12", new Product(3)));
 
         given(bookService.findAllBooks()).willReturn(books);
 
@@ -61,7 +61,7 @@ public class BookControllerTest {
     @Test
     public void createBook_And_ShowHisJson() throws Exception {
         final int productId = 3;
-        Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12");
+        Book book = new Book(1, "PT", "545465", "20x21x12");
 
         when(bookService.saveBook(productId, book)).thenReturn(book);
 
@@ -77,8 +77,8 @@ public class BookControllerTest {
     @Test
     public void updateBook_And_ReturnUpdatedBook_With_AcceptedHttpStatus() throws Exception {
         final int bookId = 1;
-        Book book = new Book(1, "OnePiece", "JP", "545465", "20x21x12");
-        Book bookBody = new Book("One Piece", "PT", "545465", "20x21x12");
+        Book book = new Book(1, "JP", "545465", "20x21x12");
+        Book bookBody = new Book("PT", "545465", "20x21x12");
 
         when(bookService.findBookById(bookId)).thenReturn(book);
         when(bookService.saveBook(bookId, bookBody)).thenReturn(bookBody);
@@ -94,7 +94,7 @@ public class BookControllerTest {
     @Test
     public void deleteBookById_And_CheckIfTheBookWasDeleted() throws Exception {
         final int bookId = 1;
-        Book book = new Book(1, "OnePiece", "JP", "545465", "20x21x12");
+        Book book = new Book(1, "JP", "545465", "20x21x12");
 
         when(bookService.deleteBook(bookId)).thenReturn(book);
         when(bookService.findBookById(bookId)).thenReturn(null);

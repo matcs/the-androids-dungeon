@@ -23,11 +23,13 @@ public class Page implements Images {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "page_id")
     private int pageId;
 
-    @Column(length = 1000)
+    @Column(name = "page_image", length = 1000)
     private byte[] pageImage;
 
+    @Column(name = "page_number")
     private int pageNumber;
 
     @ManyToOne

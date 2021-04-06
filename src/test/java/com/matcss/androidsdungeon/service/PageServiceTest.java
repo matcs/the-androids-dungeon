@@ -2,6 +2,7 @@ package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.Book;
 import com.matcss.androidsdungeon.model.Page;
+import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.repository.BookRepository;
 import com.matcss.androidsdungeon.repository.PageRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -32,7 +33,7 @@ public class PageServiceTest {
     @Before
     public void setup() {
         Page page = new Page(1, "null".getBytes(), 1);
-        Book book = new Book(1, "", "", "", "");
+        Book book = new Book(1, "", "", "", new Product(1));
 
         Mockito
                 .when(pageRepository.findPageByPageId(1))

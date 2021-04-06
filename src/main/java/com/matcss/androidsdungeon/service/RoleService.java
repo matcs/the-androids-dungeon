@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Locale;
 
 @Service
 public class RoleService {
@@ -21,13 +22,14 @@ public class RoleService {
         return roleRepository.findByRoleId(id);
     }
 
-    public Role saveRole(Role obj) {
-        return roleRepository.save(obj);
+    public Role saveRole(Role role) {
+        role.setRoleName(role.getRoleName().toUpperCase(Locale.ROOT));
+        return roleRepository.save(role);
     }
 
-    public Role updateRole(int id, Role obj) {
+    public Role updateRole(int id, Role roleDto) {
         Role role = findRoleById(id);
-        role.setRoleName(obj.getRoleName());
+        role.setRoleName(roleDto.getRoleName());
 
         return roleRepository.save(role);
     }

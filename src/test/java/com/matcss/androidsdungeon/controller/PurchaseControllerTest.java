@@ -1,9 +1,9 @@
 package com.matcss.androidsdungeon.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matcss.androidsdungeon.model.Customer;
 import com.matcss.androidsdungeon.model.Product;
 import com.matcss.androidsdungeon.model.Purchase;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.service.PurchaseService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,13 +16,12 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -34,6 +33,7 @@ public class PurchaseControllerTest {
 
     private static final String urlTemplate = "/purchases";
     private final ObjectMapper mapper = new ObjectMapper();
+    private final Date date = new GregorianCalendar(2019, Calendar.FEBRUARY, 1).getTime();
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -42,9 +42,9 @@ public class PurchaseControllerTest {
     @Test
     public void givenAllPurchases_WhenGetPurchases_ThenReturnHttpStatus200() throws Exception {
         List<Purchase> purchases = new ArrayList<>();
-        purchases.add(new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1)));
-        purchases.add(new Purchase(2, 15, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1)));
-        purchases.add(new Purchase(3, 25, 654.50f, LocalDate.now().toString(), new Customer(2), new Product(3)));
+        purchases.add(new Purchase(1, 5, 654.50f, date, new User(1), new Product(1)));
+        purchases.add(new Purchase(2, 15, 654.50f, date, new User(1), new Product(1)));
+        purchases.add(new Purchase(3, 25, 654.50f, date, new User(2), new Product(3)));
 
         given(purchaseService.findAllPurchases()).willReturn(purchases);
 
@@ -58,12 +58,12 @@ public class PurchaseControllerTest {
 
     @Test
     public void givenPurchaseById_WhenGetPurchase_ThenReturnHttpStatus200() throws Exception {
-        Purchase purchase = new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1));
+        Purchase purchase = new Purchase(1, 5, 654.50f, date, new User(1), new Product(1));
 
         given(purchaseService.findPurchaseById(1)).willReturn(purchase);
 
         mockMvc
-                .perform(get(urlTemplate + "/{purchaseId}",1)
+                .perform(get(urlTemplate + "/{purchaseId}", 1)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.purchaseId").value(purchase.getPurchaseId()));
@@ -71,14 +71,14 @@ public class PurchaseControllerTest {
 
     @Test
     public void createPurchase_ThenReturnHttpStatus201() throws Exception {
-        Purchase purchase = new Purchase(1, 5, 654.50f, LocalDate.now().toString(), new Customer(1), new Product(1));
+        Purchase purchase = new Purchase(1, 5, 654.50f, date, new User(1), new Product(1));
 
-        given(purchaseService.savePurchase(purchase,1,1)).willReturn(purchase);
+        given(purchaseService.savePurchase(purchase, 1, 1)).willReturn(purchase);
 
         mockMvc
                 .perform(post(urlTemplate)
-                        .param("productId","1")
-                        .param("customerId","1")
+                        .param("productId", "1")
+                        .param("customerId", "1")
                         .content(mapper.writeValueAsString(purchase))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated())

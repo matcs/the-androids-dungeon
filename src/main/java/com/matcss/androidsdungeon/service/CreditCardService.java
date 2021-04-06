@@ -1,9 +1,9 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.CreditCard;
-import com.matcss.androidsdungeon.model.Customer;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.repository.CreditCardRepository;
-import com.matcss.androidsdungeon.repository.CustomerRepository;
+import com.matcss.androidsdungeon.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,7 +16,7 @@ public class CreditCardService {
     private CreditCardRepository creditCardRepository;
 
     @Autowired
-    private CustomerRepository customerRepository;
+    private UserRepository userRepository;
 
     public List<CreditCard> findAllCreditCards() {
         return creditCardRepository.findAll();
@@ -27,10 +27,10 @@ public class CreditCardService {
     }
 
     public CreditCard saveCreditCard(int customerId, CreditCard obj) {
-        Customer customer = customerRepository.findCustomerByCustomerId(customerId);
-        if (customer == null)
+        User user = userRepository.findUserByUserId(customerId);
+        if (user == null)
             return null;
-        obj.setCustomer(customer);
+        obj.setUser(user);
 
         return creditCardRepository.save(obj);
     }
@@ -39,7 +39,7 @@ public class CreditCardService {
         CreditCard creditCard = findCreditCardById(id);
 
         creditCard.setNumber(creditCardBody.getNumber());
-        creditCard.setCvv(creditCardBody.getCvv());
+        creditCard.setCcv(creditCardBody.getCcv());
         creditCard.setExpirationDate(creditCard.getExpirationDate());
         creditCard.setValidated(false);
 

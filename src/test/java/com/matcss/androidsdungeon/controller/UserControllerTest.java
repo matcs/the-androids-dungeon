@@ -1,8 +1,8 @@
 package com.matcss.androidsdungeon.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.service.CustomerService;
+import com.matcss.androidsdungeon.model.User;
+import com.matcss.androidsdungeon.service.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,8 +17,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.time.LocalDate;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.BDDMockito.given;
@@ -29,76 +28,77 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 
 @RunWith(SpringRunner.class)
-@ContextConfiguration(classes = {CustomerController.class, CustomerService.class})
+@ContextConfiguration(classes = {CustomerController.class, UserService.class})
 @WebMvcTest(CustomerController.class)
 @AutoConfigureMockMvc
-public class CustomerControllerTest  {
+public class UserControllerTest {
 
-    private ObjectMapper mapper = new ObjectMapper();
-
+    private final Date date = new GregorianCalendar(2019, Calendar.FEBRUARY, 1).getTime();
+    private final ObjectMapper mapper = new ObjectMapper();
     @Autowired
     private MockMvc mockMvc;
 
     @MockBean
-    private CustomerService customerService;
+    private UserService userService;
 
     @Test
+    //TODO: add more users
     public void givenCustomers_whenGetCustomers_thenReturnHttpStatus() throws Exception {
 
-        Customer customer = new Customer(1,"odisfj","dfjids","sdlfkjodf","fdiog","sdfj");
+        User user = new User(1, "odisfj", "dfjids", "sdlfkjodf", "fdiog", date);
 
-        List<Customer> allCustomers = Arrays.asList(customer);
+        List<User> allUsers = Arrays.asList(user);
 
-        given(customerService.findAllCustomer()).willReturn(allCustomers);
+        given(userService.findAllCustomer()).willReturn(allUsers);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/customers")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(1)))
-                .andExpect(jsonPath("$[0].email").value(customer.getEmail()));
+                .andExpect(jsonPath("$[0].email").value(user.getEmail()));
     }
 
     @Test
     public void givenCustomerById_whenGetCustomer_ReturnId() throws Exception {
 
-        Customer customer = new Customer(1,"odisfj","dfjids","sdlfkjodf","fdiog","sdfj");
+        User user = new User(1, "odisfj", "dfjids", "sdlfkjodf", "fdiog", date);
 
-        when(customerService.getCustomerResponseEntity(1)).thenReturn(ResponseEntity.ok(customer));
+        when(userService.getCustomerResponseEntity(1)).thenReturn(ResponseEntity.ok(user));
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/customers/{customerId}",1)
+        mockMvc.perform(MockMvcRequestBuilders.get("/customers/{customerId}", 1)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.customerId").value(customer.getCustomerId()))
+                .andExpect(jsonPath("$.userId").value(user.getUserId()))
                 .andDo(print());
     }
 
     @Test
     public void createCustomer_thenShowHisJson() throws Exception {
-        Customer customer = new Customer(1,"odisfj","dfjids","sdlfkjodf","fdiog","sdfj");
+        User user = new User(1, "odisfj", "dfjids", "sdlfkjodf", "fdiog", date);
 
 
-        when(customerService.saveCustomer(customer)).thenReturn(customer);
+        when(userService.saveCustomer(user)).thenReturn(user);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/customers")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(customer)))
+                .content(mapper.writeValueAsString(user)))
                 .andExpect(status().isAccepted())
-                .andExpect(jsonPath("$.customerId").value(customer.getCustomerId()))
+                .andExpect(jsonPath("$.userId").value(user.getUserId()))
                 .andDo(print());
     }
 
     @Test
     public void updateCustomerData() throws Exception {
-        Customer customerData = new Customer("odisfj","dfjids","sdlfkjodf","fdiog","sdfj");
+        User userData = new User("odisfj", "dfjids", "sdlfkjodf", "fdiog", date);
 
-        Customer customerBody = new Customer("djsfnkjsdn@gmail.com","123456","Alex","Pacino", LocalDate.now().toString());
+        User userBody = new User("djsfnkjsdn@gmail.com", "123456", "Alex", "Pacino", new Date(System.currentTimeMillis()));
 
-        when(customerService.getCustomerResponseEntity(1)).thenReturn(ResponseEntity.ok(customerData));
-        when(customerService.updateCustomer(1, customerBody)).thenReturn(customerBody);
+        when(userService.getCustomerResponseEntity(1)).thenReturn(ResponseEntity.ok(userData));
+        when(userService.updateCustomer(1, userBody)).thenReturn(userBody);
 
-        mockMvc.perform(MockMvcRequestBuilders.put("/customers/{customerId}",1)
+        mockMvc.perform(MockMvcRequestBuilders.put("/customers/{customerId}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(mapper.writeValueAsString(customerBody)))
+                .content(mapper.writeValueAsString(userBody)))
                 .andExpect(status().isAccepted())
                 .andExpect(jsonPath("$.updateAt").value(LocalDate.now().toString()))
                 .andDo(print());

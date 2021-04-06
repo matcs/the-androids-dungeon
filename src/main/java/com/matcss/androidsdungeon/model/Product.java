@@ -20,17 +20,20 @@ import java.util.Set;
 public class Product {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "product_id")
     private int productId;
 
+    @Column(name = "availability")
     private boolean availability;
 
+    @Column(name = "name")
     private String name;
 
+    @Column(name = "photo")
     private byte[] photo;
 
-    private String provider;
-
+    @Column(name = "stars")
     private float stars;
 
     @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
@@ -49,7 +52,6 @@ public class Product {
         this.availability = availability;
         this.name = name;
         this.photo = photo;
-        this.provider = provider;
         this.stars = stars;
     }
 
@@ -58,7 +60,6 @@ public class Product {
         this.availability = availability;
         this.name = name;
         this.photo = photo;
-        this.provider = provider;
         this.stars = stars;
     }
 
@@ -67,14 +68,12 @@ public class Product {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Product product = (Product) o;
-        return productId == product.productId && availability == product.availability && Float.compare(product.stars, stars) == 0 && Objects.equals(name, product.name) && Arrays.equals(photo, product.photo) && Objects.equals(provider, product.provider);
+        return productId == product.productId && Objects.equals(name, product.name);
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(productId, availability, name, provider, stars);
-        result = 31 * result + Arrays.hashCode(photo);
-        return result;
+        return Objects.hash(productId, name);
     }
 
     @Override
@@ -84,7 +83,6 @@ public class Product {
                 ", availability=" + availability +
                 ", name='" + name + '\'' +
                 ", photo=" + Arrays.toString(photo) +
-                ", provider='" + provider + '\'' +
                 ", stars=" + stars +
                 ", purchases=" + purchases +
                 ", productCategories=" + productCategories +

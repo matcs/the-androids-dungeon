@@ -2,7 +2,9 @@ package com.matcss.androidsdungeon.controller;
 
 import com.matcss.androidsdungeon.model.Purchase;
 import com.matcss.androidsdungeon.service.PurchaseService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -14,17 +16,20 @@ public class PurchaseController {
 
     private final PurchaseService purchaseService;
 
+    @Autowired
     public PurchaseController(PurchaseService purchaseService) {
         this.purchaseService = purchaseService;
     }
 
     @GetMapping
+    @PreAuthorize("hasAnyAuthority('ADMIN','MANAGER')")
     public ResponseEntity<List<Purchase>> getAllPurchases() {
         List<Purchase> purchases = purchaseService.findAllPurchases();
         return ResponseEntity.ok(purchases);
     }
 
     @GetMapping("/{purchaseId}")
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN','MANAGER')")
     public ResponseEntity<Purchase> getPurchaseById(@PathVariable("purchaseId") int id) {
         Purchase purchase = purchaseService.findPurchaseById(id);
 
@@ -39,13 +44,14 @@ public class PurchaseController {
     }*/
 
     @PostMapping
-    public ResponseEntity<Purchase> createNewPurchase(@RequestBody Purchase purchaseBody,
+    @PreAuthorize("hasAnyAuthority('USER','ADMIN','MANAGER')")
+    public ResponseEntity<Purchase> createNewPurchase(@RequestBody Purchase purchaseDto,
                                                       @RequestParam("productId") int productId,
                                                       @RequestParam("customerId") int customerId) {
 
-        Purchase purchaseCreated = purchaseService.savePurchase(purchaseBody, customerId, productId);
+        Purchase purchase = purchaseService.savePurchase(purchaseDto, customerId, productId);
 
-        return ResponseEntity.created(URI.create("purchases/" + purchaseCreated.getPurchaseId())).body(purchaseCreated);
+        return purchase != null ? ResponseEntity.created(URI.create("purchases/" + purchase.getPurchaseId())).body(purchase) : ResponseEntity.badRequest().build();
     }
 
 }

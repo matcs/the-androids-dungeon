@@ -1,8 +1,7 @@
 package com.matcss.androidsdungeon.infrastructure.seeder;
 
-import com.matcss.androidsdungeon.model.Customer;
-import com.matcss.androidsdungeon.model.Role;
-import com.matcss.androidsdungeon.repository.CustomerRepository;
+import com.matcss.androidsdungeon.model.User;
+import com.matcss.androidsdungeon.repository.UserRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
@@ -11,34 +10,33 @@ import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Component
 @Slf4j
 @Order(1)
 public class CustomerDataLoader implements ApplicationRunner {
 
-    private final CustomerRepository customerRepository;
+    private final UserRepository userRepository;
+
+    private final Date date = new GregorianCalendar(2014, Calendar.FEBRUARY, 11).getTime();
 
     @Autowired
-    public CustomerDataLoader(CustomerRepository customerRepository) {
-        this.customerRepository = customerRepository;
+    public CustomerDataLoader(UserRepository userRepository) {
+        this.userRepository = userRepository;
     }
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
-        customerRepository.saveAll(generateCustomerList());
+        userRepository.saveAll(generateCustomerList());
         log.info("done!");
     }
 
-    private List<Customer> generateCustomerList(){
+    private List<User> generateCustomerList() {
         log.info("generating customers...");
         return Arrays.asList(
-                new Customer("jjjjs@gmai.com",(new BCryptPasswordEncoder().encode("foo")),"Bike","Uatuzoyky","15/03/2021"),
-                new Customer("mjackson@gmai.com","heehee","Mike","Jackson","14/03/2021")
+                new User("jjjjs@gmai.com", (new BCryptPasswordEncoder().encode("foo")), "Bike", "Uatuzoyky", date),
+                new User("mjackson@gmai.com", "heehee", "Mike", "Jackson", date)
         );
     }
 }

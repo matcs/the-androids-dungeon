@@ -29,14 +29,6 @@ public class ProductCategoryService {
         return productCategoryRepository.save(productCategory);
     }
 
-    public ProductCategory updateProductCategory(int id, ProductCategory productCategoryDto) {
-        ProductCategory productCategory = findProductCategoryById(id);
-        productCategory.setProduct(new Product(productCategoryDto.getProduct().getProductId()));
-        productCategory.setCategory(new Category(productCategory.getProductCategoryId()));
-
-        return productCategoryRepository.save(productCategoryDto);
-    }
-
     public ProductCategory deleteProductCategory(int id) {
         ProductCategory productCategory = findProductCategoryById(id);
         if (productCategory != null)

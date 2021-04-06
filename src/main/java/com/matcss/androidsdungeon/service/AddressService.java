@@ -1,7 +1,7 @@
 package com.matcss.androidsdungeon.service;
 
 import com.matcss.androidsdungeon.model.Address;
-import com.matcss.androidsdungeon.model.Customer;
+import com.matcss.androidsdungeon.model.User;
 import com.matcss.androidsdungeon.repository.AddressRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,7 +15,7 @@ public class AddressService {
     private AddressRepository addressRepository;
 
     @Autowired
-    private CustomerService customerService;
+    private UserService userService;
 
     public List<Address> findAllAddresses() {
         return addressRepository.findAll();
@@ -26,10 +26,12 @@ public class AddressService {
     }
 
     public Address saveAddress(int customerId, Address address) {
-        Customer customer = customerService.findCustomerById(customerId);
-        if (customer == null) return null;
+        User user = userService.findCustomerById(customerId);
 
-        address.setCustomer(customer);
+        if (user == null)
+            return null;
+
+        address.setUser(user);
 
         return addressRepository.save(address);
     }
@@ -37,19 +39,23 @@ public class AddressService {
     public Address updateAddress(int id, Address addressBody) {
         Address address = findAddressById(id);
 
-        address.setSelected_address(addressBody.getSelected_address());
-        address.setCep(addressBody.getCep());
-        address.setNeighborhood(addressBody.getNeighborhood());
-        address.setNumber(addressBody.getNumber());
-        address.setReference(addressBody.getReference());
+        if (address == null)
+            return null;
+
         address.setStreet(addressBody.getStreet());
+        address.setCity(addressBody.getCity());
+        address.setZipcode(addressBody.getZipcode());
+        address.setReferencePoint(addressBody.getReferencePoint());
+        address.setNumber(addressBody.getNumber());
 
         return addressRepository.save(address);
     }
 
     public Address deleteAddress(int id) {
         Address address = findAddressById(id);
-        addressRepository.delete(address);
+
+        if (address != null)
+            addressRepository.delete(address);
 
         return address;
     }

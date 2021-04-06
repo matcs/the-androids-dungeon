@@ -31,7 +31,7 @@ public class BookServiceTest {
     @Before
     public void setup() {
         Product product = new Product(1, true, "One Piece", "byte".getBytes(), "", 5f);
-        Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12", product);
+        Book book = new Book(1, "PT", "545465", "20x21x12", product);
 
         Mockito
                 .when(bookRepository.findBookByBookId(book.getBookId()))
@@ -46,7 +46,7 @@ public class BookServiceTest {
 
     @Test
     public void saveNewBookInDatabase() {
-        Book book = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1));
+        Book book = new Book(1, "PT", "545465", "20x21x12", new Product(1));
 
         Book createdBook = bookService.saveBook(1, book);
 
@@ -56,7 +56,7 @@ public class BookServiceTest {
     @Test
     public void findBookByIdAndReturnABookClass() {
         Book book = bookService.findBookById(1);
-        Book bookModel = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
+        Book bookModel = new Book(1, "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
 
         Assertions.assertEquals(book, bookModel);
     }
@@ -70,7 +70,7 @@ public class BookServiceTest {
 
     @Test
     public void findBookByIdAndUpdateBook() {
-        Book bookModel = new Book(1, "One Piece", "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
+        Book bookModel = new Book(1, "PT", "545465", "20x21x12", new Product(1, true, "One Piece", "byte".getBytes(), "", 5f));
         Book book = bookService.updateBook(1, bookModel);
         Assertions.assertEquals(book, bookModel);
     }
